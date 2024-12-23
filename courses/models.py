@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 from decimal import Decimal
 
 class Base(models.Model):
@@ -32,7 +33,7 @@ class Module(Base):
         verbose_name = 'Modulo'
         verbose_name_plural = 'Modulos'
 
-class Classe(models.Model):
+class Class(models.Model):
     title = models.CharField(max_length=255)
     module = models.ForeignKey(Module, related_name='classes' ,on_delete=models.CASCADE)
     materials = models.FileField(upload_to='materials', blank=True, null=True)

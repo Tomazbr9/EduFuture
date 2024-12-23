@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Course, Module, Classe
+from .models import Course, Module, Class
 
 @admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):
@@ -9,7 +9,7 @@ class CourseAdmin(admin.ModelAdmin):
 class ModuleAdmin(admin.ModelAdmin):
     list_display = ['title', 'course']
 
-@admin.register(Classe)
-class ClasseAdmin(admin.ModelAdmin):
+@admin.register(Class)
+class ClassAdmin(admin.ModelAdmin):
     list_display = ['title', 'module']
 
