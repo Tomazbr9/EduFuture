@@ -3,6 +3,8 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework_simplejwt.tokens import RefreshToken
+from django.contrib.auth import authenticate
 from .models import Course, Module, Class
 from .serializers import (
     CourseSerializer, ModuleSerializer, ClassSerializer, 
@@ -39,7 +41,7 @@ class RegisterUserApiView(APIView):
     """
     permission_classes = [AllowAny]
 
-    def post(self, request):
+    def post(self, request) -> Response:
         serializer = UserRegistrationSerializer(data=request.data)
 
         if serializer.is_valid():
@@ -50,5 +52,38 @@ class RegisterUserApiView(APIView):
             )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class LoginApiView(APIView):
+    """
+    View utilizada para fazer autenticação de usuários
+    """
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        username = request.data.get('username')
+        password = request.data.get('password')
+        
+        if not username or not password:
+            return Response(
+                {'message': 'Usuário ou Senha inválidos'}, 
+                status=status.HTTP_401_UNAUTHORIZED)
+        
+        user = authenticate(username=username, password=password)
+
+        if user is None:
+            return Response(
+                {'detail': 'Credenciais inválidas'}, 
+                status=status.HTTP_401_UNAUTHORIZED)
+        
+        reflesh = RefreshToken.for_user(user)
+        access_token = str(reflesh.access_token) # type: ignore
+
+        request.session['access_token'] = access_token
+
+        return Response(
+            {'message': 'login bem-sucedido!'}
+        )
+        
+
+        
 
 

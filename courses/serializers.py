@@ -1,6 +1,5 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from django.contrib.auth.hashers import make_password
 from .models import Course, Module, Class, Student, Instructor, Category
 
 class CourseSerializer(serializers.ModelSerializer):
@@ -43,9 +42,11 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         model = User
         fields = [
             'id', 
-            'username', 
-            'email', 
+            'username',
+            'email',
             'password', 
+            'first_name',
+            'last_name', 
             'is_instructor',
             'category',
             'description',
@@ -70,16 +71,18 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
     
     def create(self, validated_data) -> User:
 
-        validated_data['password'] = make_password(validated_data['password'])
-
         is_instructor = validated_data.get('is_instructor')
         category = validated_data.get('category')
         description = validated_data.get('description')
+        first_name = validated_data.get('first_name')
+        last_name = validated_data.get('last_name')
 
         user = User.objects.create_user(
             username=validated_data['username'],
             email=validated_data['email'],
-            password=validated_data['password']
+            password=validated_data['password'],
+            first_name=first_name,
+            last_name=last_name
         )
 
         if is_instructor:
