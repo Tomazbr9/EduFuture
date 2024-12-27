@@ -11,7 +11,7 @@ router.register('modules', ModuleViewSet, basename='module')
 router.register('classes', ClassViewSet, basename='class')
 
 urlpatterns = [
-    path('api/', include(router.urls)),
+    path('', include(router.urls)),
     path('register/', RegisterUserApiView.as_view(), name='register'),
     path('login/', LoginApiView.as_view(), name='login')
 ]

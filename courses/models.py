@@ -14,8 +14,14 @@ class Category(Base):
 
 class Student(Base):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    age = models.DateField()
     category = models.ForeignKey(
         Category, on_delete=models.SET_NULL, null=True, blank=True)
+    
+class Address(Base):
+    road = models.CharField(max_length=150)
+    district = models.CharField(max_length=150)
+    number = models.CharField(max_length=10)
 
 class Instructor(Base):
     user = models.OneToOneField(User, on_delete=models.CASCADE)

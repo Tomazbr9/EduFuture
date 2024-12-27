@@ -6,7 +6,19 @@ class CourseSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Course
-        fields = '__all__'
+        fields = [
+            'name',
+            'description',
+            'price',
+            'image',
+            'instructor'
+        ]
+
+    def create(self, validated_data) -> Course:
+        user = self.context['request'].user
+        instructor = Instructor.objects.get(user=user)
+        
+        return Course.objects.create(instructor=instructor, **validated_data)
 
 class ModuleSerializer(serializers.ModelSerializer):
 

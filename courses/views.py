@@ -1,5 +1,6 @@
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticated, AllowAny
+from utils.permissions import IsInstructor
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -19,7 +20,7 @@ class CourseViewSet(ModelViewSet):
         if self.action == 'list' or self.action == 'retrieve':
             permission_classes = [AllowAny]
         else:
-            permission_classes = [IsAuthenticated]
+            permission_classes = [IsAuthenticated, IsInstructor]
         
         return [permission() for permission in permission_classes]
         
@@ -27,19 +28,32 @@ class CourseViewSet(ModelViewSet):
 class ModuleViewSet(ModelViewSet):
     queryset = Module.objects.all()
     serializer_class = ModuleSerializer
-    permission_classes = [IsAuthenticated]
+    
+    def get_permissions(self):
+        if self.action == 'list' or self.action == 'retrieve':
+            permission_classes = [AllowAny]
+        else:
+            permission_classes = [IsAuthenticated, IsInstructor]
+        
+        return [permission() for permission in permission_classes]
 
 
 class ClassViewSet(ModelViewSet):
     queryset = Class.objects.all()
     serializer_class = ClassSerializer
-    permission_classes = [IsAuthenticated]
+    
+    def get_permissions(self):
+        if self.action == 'list' or self.action == 'retrieve':
+            permission_classes = [AllowAny]
+        else:
+            permission_classes = [IsAuthenticated, IsInstructor]
+        
+        return [permission() for permission in permission_classes]
 
 class RegisterUserApiView(APIView):
     """
     View utilizada para fazer registros de usuarios
     """
-    permission_classes = [AllowAny]
 
     def post(self, request) -> Response:
         serializer = UserRegistrationSerializer(data=request.data)
@@ -56,7 +70,6 @@ class LoginApiView(APIView):
     """
     View utilizada para fazer autenticação de usuários
     """
-    permission_classes = [AllowAny]
 
     def post(self, request):
         username = request.data.get('username')
@@ -76,6 +89,8 @@ class LoginApiView(APIView):
         
         reflesh = RefreshToken.for_user(user)
         access_token = str(reflesh.access_token) # type: ignore
+       
+        print(access_token)
 
         request.session['access_token'] = access_token
 
