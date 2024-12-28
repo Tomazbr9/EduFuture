@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
+from django.db import transaction
 from .models import Course, Module, Class, Student, Instructor, Category
 
 class CourseSerializer(serializers.ModelSerializer):
@@ -20,7 +21,7 @@ class CourseSerializer(serializers.ModelSerializer):
         
         return Course.objects.create(instructor=instructor, **validated_data)
 
-class ModuleSerializer(serializers.ModelSerializer):
+class ModuleSerializer(serializers.ModelSerializer): 
 
     class Meta:
         model = Module
@@ -37,6 +38,9 @@ class StudentSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class InstructorSerializer(serializers.ModelSerializer):
+
+    courses = CourseSerializer(many=True)
+    
     class Meta:
         model = Instructor
         fields = '__all__'
@@ -49,6 +53,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
     category = serializers.PrimaryKeyRelatedField(
         queryset=Category.objects.all(), write_only=True, required=True
     )
+    age = serializers.DateField(write_only=True, required=True)
 
     class Meta:
         model = User
@@ -59,6 +64,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
             'password', 
             'first_name',
             'last_name', 
+            'age',
             'is_instructor',
             'category',
             'description',
@@ -77,9 +83,17 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
     def validate_email(self, value):
         if User.objects.filter(email=value).exists():
             raise serializers.ValidationError(
-                'Já existe um usuário com este email'
+                'Já existe um usuário com este email.'
             )
         return value
+    
+    def validate(self, attrs):
+        if attrs['username'] == attrs['password']:
+            raise serializers.ValidationError(
+                'Usuário e email não podem serem iguais.'
+            )
+        
+        return attrs
     
     def create(self, validated_data) -> User:
 
@@ -88,27 +102,32 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         description = validated_data.get('description')
         first_name = validated_data.get('first_name')
         last_name = validated_data.get('last_name')
+        age = validated_data['age']
 
-        user = User.objects.create_user(
-            username=validated_data['username'],
-            email=validated_data['email'],
-            password=validated_data['password'],
-            first_name=first_name,
-            last_name=last_name
-        )
+        with transaction.atomic():
 
-        if is_instructor:
-            Instructor.objects.create(
-                user=user,
-                description=description,
-                category=category
+            user = User.objects.create_user(
+                username=validated_data['username'],
+                email=validated_data['email'],
+                password=validated_data['password'],
+                first_name=first_name,
+                last_name=last_name
             )
-        else:
-            Student.objects.create(
-                user=user,
-                category=category
-            )
-        
+
+            if is_instructor:
+                Instructor.objects.create(
+                    user=user,
+                    age=age,
+                    description=description,
+                    category=category
+                )
+            else:
+                Student.objects.create(
+                    user=user,
+                    age=age,
+                    category=category
+                )
+            
         return user
 
     

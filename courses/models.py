@@ -17,17 +17,22 @@ class Student(Base):
     age = models.DateField()
     category = models.ForeignKey(
         Category, on_delete=models.SET_NULL, null=True, blank=True)
-    
+
+class Instructor(Base):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    age = models.DateField()
+    description = models.TextField(max_length=255, null=True, blank=True)
+    category = models.ForeignKey(
+        Category, on_delete=models.SET_NULL, null=True, blank=True)
+
 class Address(Base):
     road = models.CharField(max_length=150)
     district = models.CharField(max_length=150)
     number = models.CharField(max_length=10)
-
-class Instructor(Base):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    description = models.TextField(max_length=255, null=True, blank=True)
-    category = models.ForeignKey(
-        Category, on_delete=models.SET_NULL, null=True, blank=True)
+    city = models.CharField(max_length=50)
+    cep = models.CharField(max_length=8)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    instructor = models.ForeignKey(Instructor, on_delete=models.CASCADE)
 
 class Course(Base):
     name = models.CharField(max_length=255)
@@ -46,6 +51,7 @@ class Course(Base):
 
 class Module(Base):
     title = models.CharField(max_length=255)
+    completed = models.BooleanField(default=False)
     course = models.ForeignKey(Course, related_name='modules', on_delete=models.CASCADE)
 
     def __str__(self) -> str:
@@ -57,8 +63,9 @@ class Module(Base):
 
 class Class(models.Model):
     title = models.CharField(max_length=255)
-    module = models.ForeignKey(Module, related_name='classes' ,on_delete=models.CASCADE)
     materials = models.FileField(upload_to='materials', blank=True, null=True)
+    completed = models.BooleanField(default=False)
+    module = models.ForeignKey(Module, related_name='classes', on_delete=models.CASCADE)
 
     def __str__(self) -> str:
         return self.title
