@@ -1,7 +1,9 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from django.db import transaction
-from .models import Course, Module, Class, Student, Instructor, Category
+from .models import (
+    Course, Module, Class, Student, Instructor, Category, StudentCourse
+)
 
 class CourseSerializer(serializers.ModelSerializer):
     
@@ -12,6 +14,7 @@ class CourseSerializer(serializers.ModelSerializer):
             'description',
             'price',
             'image',
+            'student',
             'instructor'
         ]
 
@@ -39,11 +42,20 @@ class StudentSerializer(serializers.ModelSerializer):
 
 class InstructorSerializer(serializers.ModelSerializer):
 
-    courses = CourseSerializer(many=True)
+    courses = serializers.PrimaryKeyRelatedField(read_only=True, many=True)
     
     class Meta:
         model = Instructor
         fields = '__all__'
+
+class StudentCourseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = StudentCourse
+        fields = [
+            'student',
+            'course',
+            'buy'
+        ]
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
     is_instructor = serializers.BooleanField(write_only=True, required=True)
@@ -90,7 +102,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
     def validate(self, attrs):
         if attrs['username'] == attrs['password']:
             raise serializers.ValidationError(
-                'Usuário e email não podem serem iguais.'
+                'Usuário e senha não podem serem iguais.'
             )
         
         return attrs

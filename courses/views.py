@@ -6,10 +6,11 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import authenticate
-from .models import Course, Module, Class
+from .models import Course, Module, Class, Instructor, Student, StudentCourse
 from .serializers import (
     CourseSerializer, ModuleSerializer, ClassSerializer, 
-    UserRegistrationSerializer
+    UserRegistrationSerializer, InstructorSerializer, 
+    StudentSerializer, StudentCourseSerializer
 )
 
 class CourseViewSet(ModelViewSet):
@@ -50,6 +51,14 @@ class ClassViewSet(ModelViewSet):
         
         return [permission() for permission in permission_classes]
 
+class InstructorViewSet(ModelViewSet):
+    queryset = Instructor.objects.all()
+    serializer_class = InstructorSerializer
+
+class StudentViewSet(ModelViewSet):
+    queryset = Student.objects.all()
+    serializer_class = StudentSerializer
+
 class RegisterUserApiView(APIView):
     """
     View utilizada para fazer registros de usuarios
@@ -89,7 +98,7 @@ class LoginApiView(APIView):
         
         reflesh = RefreshToken.for_user(user)
         access_token = str(reflesh.access_token) # type: ignore
-       
+
         print(access_token)
 
         request.session['access_token'] = access_token
@@ -98,6 +107,21 @@ class LoginApiView(APIView):
             {'message': 'login bem-sucedido!'}
         )
         
+class BuyApiView(APIView):
+    """
+    API View Utilizada para vincular aluno e curso 
+    """
+
+    def post(self, request):
+        serializer = StudentCourseSerializer(data=request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 
         
 

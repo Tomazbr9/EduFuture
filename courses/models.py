@@ -17,6 +17,7 @@ class Student(Base):
     age = models.DateField()
     category = models.ForeignKey(
         Category, on_delete=models.SET_NULL, null=True, blank=True)
+    courses = models.ManyToManyField('Course', through='StudentCourse')
 
 class Instructor(Base):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -39,8 +40,10 @@ class Course(Base):
     description = models.TextField(max_length=255)
     price = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal('0.0'))
     image = models.ImageField(upload_to='courses', blank=True, null=True)
+    completed = models.BooleanField(default=False)
+    registered = models.IntegerField(default=0)
     instructor = models.ForeignKey(
-        Instructor, on_delete=models.SET_NULL, null=True, blank=True)
+        Instructor, related_name='courses', on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self) -> str:
         return self.name
@@ -74,6 +77,9 @@ class Class(models.Model):
         verbose_name = 'Aula'
         verbose_name_plural = 'Aulas'
 
+class StudentCourse(Base):
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    buy = models.BooleanField(default=False)
 
-  
 
