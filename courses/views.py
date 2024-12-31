@@ -113,7 +113,8 @@ class BuyApiView(APIView):
     """
 
     def post(self, request):
-        serializer = StudentCourseSerializer(data=request.data)
+        serializer = StudentCourseSerializer(
+            data=request.data, context={'request': request})
 
         if serializer.is_valid():
             serializer.save()

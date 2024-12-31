@@ -27,4 +27,4 @@ class InstructorAdmin(admin.ModelAdmin):
 
 @admin.register(StudentCourse)
 class StudentCourseAdmin(admin.ModelAdmin):
-    list_display = ['student', 'course', 'buy']
+    list_display = ['student', 'course']

@@ -80,6 +80,5 @@ class Class(models.Model):
 class StudentCourse(Base):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    buy = models.BooleanField(default=False)
 
 

@@ -49,13 +49,41 @@ class InstructorSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class StudentCourseSerializer(serializers.ModelSerializer):
+    
     class Meta:
         model = StudentCourse
+
         fields = [
             'student',
             'course',
-            'buy'
+            
         ]
+
+        read_only_fields = ['student']
+    
+    def get_authenticated_student(self):
+        """
+        Recupera usuário authenticado
+        """
+        user = self.context['request'].user
+        
+        try:
+            return Student.objects.get(user=user)
+        except Student.DoesNotExist:
+            raise serializers.ValidationError('Estudante não existe!')
+    
+    def validate(self, data):
+        
+        course = data['course']
+        student = self.get_authenticated_student()
+
+        if StudentCourse.objects.filter(student=student, course=course).exists():
+            raise serializers.ValidationError("Este curso ja foi comprado!")
+        return data
+    
+    def create(self, validated_data) -> StudentCourse:
+        student = self.get_authenticated_student()
+        return StudentCourse.objects.create(student=student, **validated_data)
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
     is_instructor = serializers.BooleanField(write_only=True, required=True)
