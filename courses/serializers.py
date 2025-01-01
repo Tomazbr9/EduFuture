@@ -14,7 +14,6 @@ class CourseSerializer(serializers.ModelSerializer):
             'description',
             'price',
             'image',
-            'student',
             'instructor'
         ]
 
@@ -70,7 +69,7 @@ class StudentCourseSerializer(serializers.ModelSerializer):
         try:
             return Student.objects.get(user=user)
         except Student.DoesNotExist:
-            raise serializers.ValidationError('Estudante não existe!')
+            raise serializers.ValidationError('Aluno não existe!')
     
     def validate(self, data):
         

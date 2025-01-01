@@ -41,7 +41,7 @@ class Course(Base):
     price = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal('0.0'))
     image = models.ImageField(upload_to='courses', blank=True, null=True)
     completed = models.BooleanField(default=False)
-    registered = models.IntegerField(default=0)
+    certificate = models.URLField(blank=True)
     instructor = models.ForeignKey(
         Instructor, related_name='courses', on_delete=models.SET_NULL, null=True, blank=True)
 

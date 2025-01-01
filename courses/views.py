@@ -43,13 +43,6 @@ class ClassViewSet(ModelViewSet):
     queryset = Class.objects.all()
     serializer_class = ClassSerializer
     
-    def get_permissions(self):
-        if self.action == 'list' or self.action == 'retrieve':
-            permission_classes = [AllowAny]
-        else:
-            permission_classes = [IsAuthenticated, IsInstructor]
-        
-        return [permission() for permission in permission_classes]
 
 class InstructorViewSet(ModelViewSet):
     queryset = Instructor.objects.all()
@@ -111,6 +104,8 @@ class BuyApiView(APIView):
     """
     API View Utilizada para vincular aluno e curso 
     """
+
+    permission_classes = [IsAuthenticated]
 
     def post(self, request):
         serializer = StudentCourseSerializer(
