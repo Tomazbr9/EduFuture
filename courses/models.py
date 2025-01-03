@@ -15,14 +15,8 @@ class Category(Base):
 class Student(Base):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     age = models.DateField()
-    category = models.ForeignKey(
-        Category, on_delete=models.SET_NULL, null=True, blank=True)
-    courses = models.ManyToManyField('Course', through='StudentCourse')
-
-class Instructor(Base):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    age = models.DateField()
-    description = models.TextField(max_length=255, null=True, blank=True)
+    is_instructor = models.BooleanField(default=False)
+    description = models.TextField(blank=True, null=True)
     category = models.ForeignKey(
         Category, on_delete=models.SET_NULL, null=True, blank=True)
 
@@ -33,7 +27,6 @@ class Address(Base):
     city = models.CharField(max_length=50)
     cep = models.CharField(max_length=8)
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
-    instructor = models.ForeignKey(Instructor, on_delete=models.CASCADE)
 
 class Course(Base):
     name = models.CharField(max_length=255)
@@ -43,7 +36,7 @@ class Course(Base):
     completed = models.BooleanField(default=False)
     certificate = models.URLField(blank=True)
     instructor = models.ForeignKey(
-        Instructor, related_name='courses', on_delete=models.SET_NULL, null=True, blank=True)
+        Student, related_name='courses', on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self) -> str:
         return self.name

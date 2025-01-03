@@ -1,15 +1,16 @@
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from utils.permissions import IsInstructor
+from rest_framework.exceptions import PermissionDenied
+from utils.permissions import IsInstructor, PurchaseVerifition
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import authenticate
-from .models import Course, Module, Class, Instructor, Student, StudentCourse
+from .models import Course, Module, Class, Student
 from .serializers import (
     CourseSerializer, ModuleSerializer, ClassSerializer, 
-    UserRegistrationSerializer, InstructorSerializer, 
+    UserRegistrationSerializer,
     StudentSerializer, StudentCourseSerializer
 )
 
@@ -21,7 +22,7 @@ class CourseViewSet(ModelViewSet):
         if self.action == 'list' or self.action == 'retrieve':
             permission_classes = [AllowAny]
         else:
-            permission_classes = [IsAuthenticated, IsInstructor]
+            permission_classes = [IsInstructor]
         
         return [permission() for permission in permission_classes]
         
@@ -34,7 +35,7 @@ class ModuleViewSet(ModelViewSet):
         if self.action == 'list' or self.action == 'retrieve':
             permission_classes = [AllowAny]
         else:
-            permission_classes = [IsAuthenticated, IsInstructor]
+            permission_classes = [IsInstructor]
         
         return [permission() for permission in permission_classes]
 
@@ -42,11 +43,20 @@ class ModuleViewSet(ModelViewSet):
 class ClassViewSet(ModelViewSet):
     queryset = Class.objects.all()
     serializer_class = ClassSerializer
-    
 
-class InstructorViewSet(ModelViewSet):
-    queryset = Instructor.objects.all()
-    serializer_class = InstructorSerializer
+    def get_permissions(self):
+        if self.action == 'list' or self.action == 'retrieve' or self.action == 'partial_update':
+            permission_classes = [PurchaseVerifition]
+             
+        return [permission() for permission in permission_classes]
+    
+    def partial_update(self, request, *args, **kwargs):
+        allowed_fields = ['completed']
+
+        if any(field not in allowed_fields for field in request.data.keys()):
+            raise PermissionDenied("Você só pode atualizar o campo permitido.")
+        
+        return super().partial_update(request, *args, **kwargs)
 
 class StudentViewSet(ModelViewSet):
     queryset = Student.objects.all()

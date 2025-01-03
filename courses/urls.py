@@ -3,13 +3,12 @@ from rest_framework.routers import DefaultRouter
 from .views import (
     CourseViewSet, ModuleViewSet, 
     ClassViewSet, RegisterUserApiView,
-    LoginApiView, InstructorViewSet, StudentViewSet, BuyApiView)
+    LoginApiView, StudentViewSet, BuyApiView)
 
 router = DefaultRouter()
 router.register('courses', CourseViewSet, basename='course')
 router.register('modules', ModuleViewSet, basename='module')
 router.register('classes', ClassViewSet, basename='class')
-router.register('instructors', InstructorViewSet, basename='instructor')
 router.register('students', StudentViewSet, basename='student')
 
 urlpatterns = [
