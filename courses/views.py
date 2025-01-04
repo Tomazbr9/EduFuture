@@ -1,7 +1,7 @@
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.exceptions import PermissionDenied
-from utils.permissions import IsInstructor, PurchaseVerifition
+from utils.permissions import IsInstructor, VerifyCoursePurchase
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -19,7 +19,7 @@ class CourseViewSet(ModelViewSet):
     serializer_class = CourseSerializer
 
     def get_permissions(self):
-        if self.action == 'list' or self.action == 'retrieve':
+        if self.action in ['list', 'retrieve']:
             permission_classes = [AllowAny]
         else:
             permission_classes = [IsInstructor]
@@ -32,7 +32,7 @@ class ModuleViewSet(ModelViewSet):
     serializer_class = ModuleSerializer
     
     def get_permissions(self):
-        if self.action == 'list' or self.action == 'retrieve':
+        if self.action in ['list', 'retrieve']:
             permission_classes = [AllowAny]
         else:
             permission_classes = [IsInstructor]
@@ -44,10 +44,8 @@ class ClassViewSet(ModelViewSet):
     queryset = Class.objects.all()
     serializer_class = ClassSerializer
 
-    def get_permissions(self):
-        if self.action == 'list' or self.action == 'retrieve' or self.action == 'partial_update':
-            permission_classes = [PurchaseVerifition]
-             
+    def get_permissions(self): 
+        permission_classes = [VerifyCoursePurchase]     
         return [permission() for permission in permission_classes]
     
     def partial_update(self, request, *args, **kwargs):

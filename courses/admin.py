@@ -19,7 +19,7 @@ class CategoryAdmin(admin.ModelAdmin):
 
 @admin.register(Student)
 class StudentAdmin(admin.ModelAdmin):
-    list_display = ['id', 'user', 'category']
+    list_display = ['id', 'user', 'category', 'is_instructor']
 
 @admin.register(StudentCourse)
 class StudentCourseAdmin(admin.ModelAdmin):
