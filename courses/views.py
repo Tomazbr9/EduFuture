@@ -7,11 +7,11 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import authenticate
-from .models import Course, Module, Class, Student
+from .models import Course, Module, Class, Student, StudentClass
 from .serializers import (
     CourseSerializer, ModuleSerializer, ClassSerializer, 
-    UserRegistrationSerializer,
-    StudentSerializer, StudentCourseSerializer
+    UserRegistrationSerializer, StudentSerializer, 
+    StudentCourseSerializer, StudentClassSerializer
 )
 
 class CourseViewSet(ModelViewSet):
@@ -59,6 +59,10 @@ class ClassViewSet(ModelViewSet):
 class StudentViewSet(ModelViewSet):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
+
+class StudentClassViewSet(ModelViewSet):
+    queryset = StudentClass.objects.all()
+    serializer_class = StudentClassSerializer
 
 class RegisterUserApiView(APIView):
     """

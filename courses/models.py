@@ -33,8 +33,6 @@ class Course(Base):
     description = models.TextField(max_length=255)
     price = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal('0.0'))
     image = models.ImageField(upload_to='courses', blank=True, null=True)
-    completed = models.BooleanField(default=False)
-    certificate = models.URLField(blank=True)
     instructor = models.ForeignKey(
         Student, related_name='courses', on_delete=models.SET_NULL, null=True, blank=True)
 
@@ -47,7 +45,6 @@ class Course(Base):
 
 class Module(Base):
     title = models.CharField(max_length=255)
-    completed = models.BooleanField(default=False)
     course = models.ForeignKey(Course, related_name='modules', on_delete=models.CASCADE)
 
     def __str__(self) -> str:
@@ -60,7 +57,6 @@ class Module(Base):
 class Class(models.Model):
     title = models.CharField(max_length=255)
     materials = models.FileField(upload_to='materials', blank=True, null=True)
-    completed = models.BooleanField(default=False)
     module = models.ForeignKey(Module, related_name='classes', on_delete=models.CASCADE)
 
     def __str__(self) -> str:
@@ -73,5 +69,19 @@ class Class(models.Model):
 class StudentCourse(Base):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    certificate = models.URLField(default="")
+    completed = models.BooleanField(default=False)
+
+class StudentModule(Base):
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    module = models.ForeignKey(Module, on_delete=models.CASCADE)
+    completed = models.BooleanField(default=False)
+
+class StudentClass(Base):
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    cls = models.ForeignKey(Class, on_delete=models.CASCADE)
+    completed = models.BooleanField(default=False)
+
+
 
 

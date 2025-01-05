@@ -4,7 +4,8 @@ from courses.models import StudentCourse, Student
 
 class IsInstructor(permissions.BasePermission):
     """
-    Permissão personalizada para verificar se o usuario é professor
+    Permissão personalizada para verificar se o usuario é professor 
+    e dono do curso
     """
     def has_object_permission(self, request, view, obj):
         

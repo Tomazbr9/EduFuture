@@ -2,7 +2,8 @@ from rest_framework import serializers
 from django.contrib.auth.models import User
 from django.db import transaction
 from .models import (
-    Course, Module, Class, Student, Category, StudentCourse
+    Course, Module, Class, Student, Category, 
+    StudentCourse, StudentModule, StudentClass
 )
 
 class CourseSerializer(serializers.ModelSerializer):
@@ -34,9 +35,17 @@ class ClassSerializer(serializers.ModelSerializer):
         model = Class
         fields = '__all__'
 
+    def create(self, validated_name):
+        ...
+
 class StudentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Student
+        fields = '__all__'
+
+class StudentClassSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = StudentClass
         fields = '__all__'
 
 class StudentCourseSerializer(serializers.ModelSerializer):
@@ -72,11 +81,24 @@ class StudentCourseSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Este curso ja foi comprado!")
         return data
     
-    def create(self, validated_data) -> StudentCourse:
+    def create(self, validated_data):
         student = self.get_authenticated_student()
-        return StudentCourse.objects.create(student=student, **validated_data)
+        course = validated_data.get('course')
+        
+        with transaction.atomic():
 
+            for module in course.modules.all(): #type: ignore
+                StudentModule.objects.get_or_create(
+                    student=student, module=module)
+            
+            for module in course.modules.all(): #type: ignore
+                for cls in module.classes.all():
+                    StudentClass.objects.get_or_create(student=student, cls=cls)
+
+            return StudentCourse.objects.get_or_create(student=student, course=course)
+            
 class UserRegistrationSerializer(serializers.ModelSerializer):
+    
     is_instructor = serializers.BooleanField(default=False)
     description = serializers.CharField(
         max_length=255, required=False, write_only=True
