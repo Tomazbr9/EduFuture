@@ -3,7 +3,8 @@ from rest_framework.routers import DefaultRouter
 from .views import (
     CourseViewSet, ModuleViewSet, 
     ClassViewSet, RegisterUserApiView,
-    LoginApiView, StudentViewSet, BuyApiView, StudentClassViewSet)
+    LoginApiView, StudentViewSet, BuyApiView, 
+    StudentClassViewSet, UpdateUserApiView)
 
 router = DefaultRouter()
 router.register('courses', CourseViewSet, basename='course')
@@ -15,6 +16,7 @@ router.register('students_classes', StudentClassViewSet, basename='student_class
 urlpatterns = [
     path('', include(router.urls)),
     path('register/', RegisterUserApiView.as_view(), name='register'),
+    path('update/<int:pk>/', UpdateUserApiView.as_view(), name='update-user'),
     path('login/', LoginApiView.as_view(), name='login'),
     path('buy/', BuyApiView.as_view(), name='buy')
 ]

@@ -6,12 +6,14 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
+from django.shortcuts import get_object_or_404
+from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from .models import Course, Module, Class, Student, StudentClass
 from .serializers import (
     CourseSerializer, ModuleSerializer, ClassSerializer, 
     UserRegistrationSerializer, StudentSerializer, 
-    StudentCourseSerializer, StudentClassSerializer
+    StudentCourseSerializer, StudentClassSerializer, UserUpdateSerializer
 )
 
 class CourseViewSet(ModelViewSet):
@@ -60,6 +62,10 @@ class StudentViewSet(ModelViewSet):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
 
+    def get_queryset(self):
+        user = self.request.user
+        return self.queryset.filter(user=user)
+
 class StudentClassViewSet(ModelViewSet):
     queryset = StudentClass.objects.all()
     serializer_class = StudentClassSerializer
@@ -79,6 +85,23 @@ class RegisterUserApiView(APIView):
                 status=status.HTTP_201_CREATED
             )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class UpdateUserApiView(APIView):
+    """
+    View para atualizar usuários existentes
+    """
+
+    def patch(self, request, pk: int) -> Response:
+        user = get_object_or_404(User, pk=pk)
+        serializer = UserUpdateSerializer(user, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(
+                {'message': 'Usuário atualizado com sucesso.'},
+                status=status.HTTP_200_OK
+            )
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
 
 class LoginApiView(APIView):
     """

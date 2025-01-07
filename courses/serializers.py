@@ -29,14 +29,43 @@ class ModuleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Module
         fields = '__all__'
+    
+    def create(self, validated_data):
+
+        new_module = super().create(validated_data)
+        course = new_module.course
+
+        student_list = StudentCourse.objects.filter(
+            course=course).values_list('student', flat=True)
+        
+        for student_id in student_list:
+            student = Student.objects.get(pk=student_id)
+            StudentModule.objects.get_or_create(
+                module=new_module, student=student
+            )
+        
+        return new_module
 
 class ClassSerializer(serializers.ModelSerializer):
     class Meta:
         model = Class
         fields = '__all__'
 
-    def create(self, validated_name):
-        ...
+    def create(self, validated_data):
+        new_class = super().create(validated_data)
+        course = new_class.module.course
+
+        student_list = StudentCourse.objects.filter(
+            course=course).values_list('student', flat=True)
+
+        for student_id in student_list:
+            student = Student.objects.get(pk=student_id)
+            StudentClass.objects.get_or_create(
+                cls=new_class, student=student
+            )
+        
+        return new_class
+
 
 class StudentSerializer(serializers.ModelSerializer):
     class Meta:
@@ -95,7 +124,8 @@ class StudentCourseSerializer(serializers.ModelSerializer):
                 for cls in module.classes.all():
                     StudentClass.objects.get_or_create(student=student, cls=cls)
 
-            return StudentCourse.objects.get_or_create(student=student, course=course)
+            student_course, _ = StudentCourse.objects.get_or_create(student=student, course=course)
+            return student_course
             
 class UserRegistrationSerializer(serializers.ModelSerializer):
     
@@ -175,5 +205,52 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
             )
             
         return user
-
     
+
+class UserUpdateSerializer(serializers.ModelSerializer):
+    age = serializers.DateField(required=False)
+    is_instructor = serializers.BooleanField(default=False)
+    description = serializers.CharField(
+        max_length=255, required=False, allow_blank=True
+    )
+    category = serializers.PrimaryKeyRelatedField(
+        queryset=Category.objects.all(), required=False, allow_null=True
+    )
+
+    class Meta:
+        model = User
+        fields = [
+            'username',
+            'email',
+            'first_name',
+            'last_name',
+            'age',
+            'is_instructor',
+            'description',
+            'category',
+        ]
+        extra_kwargs = {
+            'username': {'required': False},
+            'email': {'required': False},
+            'first_name': {'required': False},
+            'last_name': {'required': False},
+        }
+
+    def update(self, instance, validated_data):
+        # Atualiza dados do usuário
+        user_data = {key: validated_data.pop(key) for key in [
+            'username', 'email', 'first_name', 'last_name'
+        ] if key in validated_data}
+
+        for attr, value in user_data.items():
+            setattr(instance, attr, value)
+
+        # Atualiza dados do estudante
+        student_data = validated_data
+        student, _ = Student.objects.get_or_create(user=instance)
+        for attr, value in student_data.items():
+            setattr(student, attr, value)
+
+        instance.save()
+        student.save()
+        return instance
