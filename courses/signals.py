@@ -1,6 +1,7 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from .models import StudentClass, StudentModule, StudentCourse
+from utils.certificate_generator import generate_certificate
 
 @receiver(post_save, sender=StudentClass)
 def update_module_and_course_completion(sender, instance, **kwargs):
@@ -29,8 +30,12 @@ def update_module_and_course_completion(sender, instance, **kwargs):
     ).count() == 0
 
     if all_modules_completed:
+        student_name = student.user.first_name
+        course_name = course.name
+        certificate = generate_certificate(student_name, course_name)
+        
         # Marcar o curso como concluído
         StudentCourse.objects.update_or_create(
-            student=student, course=course,
+            student=student, course=course, certificate=certificate,
             defaults={'completed': True}
         )

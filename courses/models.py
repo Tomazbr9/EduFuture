@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from decimal import Decimal
 
+# Modelo Base para passar inforções para os demais modelos
 class Base(models.Model):
     creation = models.DateTimeField(auto_now_add=True) # Data de criação
     update = models.DateTimeField(auto_now=True) # Data de atualização
@@ -9,9 +10,11 @@ class Base(models.Model):
     class Meta:
         abstract = True 
 
+# Modelo Categoria, utilizado para mostrar determinado assunto desejado ao usuario
 class Category(Base):
     name = models.CharField(max_length=255)
 
+# Modelo de determina se o usario é um aluno ou instrutor
 class Student(Base):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     age = models.DateField()
@@ -20,6 +23,7 @@ class Student(Base):
     category = models.ForeignKey(
         Category, on_delete=models.SET_NULL, null=True, blank=True)
 
+# Modelo de Endereços Multivalorado
 class Address(Base):
     road = models.CharField(max_length=150)
     district = models.CharField(max_length=150)
@@ -28,6 +32,7 @@ class Address(Base):
     cep = models.CharField(max_length=8)
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
 
+# Modelo de Curso 
 class Course(Base):
     name = models.CharField(max_length=255)
     description = models.TextField(max_length=255)
@@ -43,6 +48,7 @@ class Course(Base):
         verbose_name = 'Curso'
         verbose_name_plural = 'Cursos'
 
+# Modelo de Modulo
 class Module(Base):
     title = models.CharField(max_length=255)
     course = models.ForeignKey(Course, related_name='modules', on_delete=models.CASCADE)
@@ -54,6 +60,7 @@ class Module(Base):
         verbose_name = 'Modulo'
         verbose_name_plural = 'Modulos'
 
+# Modelo de Aula
 class Class(models.Model):
     title = models.CharField(max_length=255)
     materials = models.FileField(upload_to='materials', blank=True, null=True)
@@ -66,17 +73,20 @@ class Class(models.Model):
         verbose_name = 'Aula'
         verbose_name_plural = 'Aulas'
 
+# Modelo para relacionar Curso com Aluno
 class StudentCourse(Base):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     certificate = models.URLField(default="")
     completed = models.BooleanField(default=False)
 
+# Modelo para relacionar Modulo com Aluno
 class StudentModule(Base):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     module = models.ForeignKey(Module, on_delete=models.CASCADE)
     completed = models.BooleanField(default=False)
 
+# Modelo para relacionar Aula com Aluno
 class StudentClass(Base):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     cls = models.ForeignKey(Class, on_delete=models.CASCADE)
