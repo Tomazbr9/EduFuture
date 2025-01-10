@@ -17,14 +17,15 @@ class IsInstructor(permissions.BasePermission):
         except Student.DoesNotExist:
             return False
         
-        
         try:
             course_or_module_get_instructor = obj.course.instructor
         except AttributeError:
             course_or_module_get_instructor = obj.instructor
 
-
-        return course_or_module_get_instructor == student
+        if not course_or_module_get_instructor.is_instructor:
+            return course_or_module_get_instructor == student
+        else:
+            raise PermissionDenied('Somente professores podem criar cursos')
      
     
 class VerifyCoursePurchase(permissions.BasePermission):

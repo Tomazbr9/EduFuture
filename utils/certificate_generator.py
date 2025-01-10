@@ -13,17 +13,18 @@ def generate_certificate(student_name, course_name):
     draw = ImageDraw.Draw(certificate)
 
     font_name = ImageFont.truetype(font, font_size)
-    font_outhers = ImageFont.truetype(font, int(font_size * 0.6))
+    font_outhers = ImageFont.truetype(font, int(font_size * 1.5))
 
-    name_pos = (400, 300)
+    name_pos = (670, 430)
     draw.text(name_pos, student_name, font=font_name, fill='black')
 
-    course_pos = (400, 400)
+    course_pos = (570, 580)
     draw.text(course_pos, course_name, font=font_outhers, fill='black')
 
-    date_pos = (400, 500)
-    date = datetime.now()
-    draw.text(date_pos, f"{date}", font=font_outhers, fill='black')
+    date_pos = (695, 685)
+    format = "%d/%m/%Y"
+    date = datetime.now().strftime(format)
+    draw.text(date_pos, f"{date}", font=font_name, fill='black')
     
     certificate_path = SAVE_IN / f'certificado_{student_name}_{course_name}.jpg'
     certificate.save(certificate_path)

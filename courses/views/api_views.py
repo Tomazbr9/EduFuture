@@ -1,7 +1,6 @@
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.exceptions import PermissionDenied
-from utils.permissions import IsInstructor, VerifyCoursePurchase
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -9,8 +8,9 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
-from .models import Course, Module, Class, Student, StudentClass
-from .serializers import (
+from utils.permissions import IsInstructor, VerifyCoursePurchase
+from courses.models import Course, Module, Class, Student, StudentClass
+from courses.serializers import (
     CourseSerializer, ModuleSerializer, ClassSerializer, 
     UserRegistrationSerializer, StudentSerializer, 
     StudentCourseSerializer, StudentClassSerializer, UserUpdateSerializer
