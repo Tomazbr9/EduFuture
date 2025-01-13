@@ -25,9 +25,8 @@ class CourseViewSet(ModelViewSet):
             permission_classes = [AllowAny]
         else:
             permission_classes = [IsInstructor]
-        
+        print(f"Ação: {self.action}, Permissões: {permission_classes}")
         return [permission() for permission in permission_classes]
-        
             
 class ModuleViewSet(ModelViewSet):
     queryset = Module.objects.all()
@@ -46,7 +45,7 @@ class ClassViewSet(ModelViewSet):
     queryset = Class.objects.all()
     serializer_class = ClassSerializer
 
-    def get_permissions(self): 
+    def get_permissions(self):
         permission_classes = [VerifyCoursePurchase]     
         return [permission() for permission in permission_classes]
     
