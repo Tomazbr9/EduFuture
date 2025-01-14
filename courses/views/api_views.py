@@ -25,7 +25,6 @@ class CourseViewSet(ModelViewSet):
             permission_classes = [AllowAny]
         else:
             permission_classes = [IsInstructor]
-        print(f"Ação: {self.action}, Permissões: {permission_classes}")
         return [permission() for permission in permission_classes]
             
 class ModuleViewSet(ModelViewSet):
@@ -56,7 +55,7 @@ class ClassViewSet(ModelViewSet):
             raise PermissionDenied("Você só pode atualizar o campo permitido.")
         
         return super().partial_update(request, *args, **kwargs)
-
+    
 class StudentViewSet(ModelViewSet):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer

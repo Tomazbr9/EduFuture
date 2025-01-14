@@ -32,6 +32,12 @@ class ModuleSerializer(serializers.ModelSerializer):
     
     def create(self, validated_data):
 
+        course = validated_data['course']
+
+        instructor = Student.objects.get(user=self.context['request'].user)
+        if course.instructor != instructor:
+            raise serializers.ValidationError("Não é possivel criar modulos em cursos de outros professores.")
+
         new_module = super().create(validated_data)
         course = new_module.course
 
@@ -52,6 +58,13 @@ class ClassSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def create(self, validated_data):
+        module = validated_data['module']
+
+        instructor = Student.objects.get(user=self.context['request'].user)
+        if module.course.instructor != instructor:
+            raise serializers.ValidationError("Não é possivel criar aulas em cursos de outros professores.")
+
+
         new_class = super().create(validated_data)
         course = new_class.module.course
 
