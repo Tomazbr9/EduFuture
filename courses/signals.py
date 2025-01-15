@@ -35,7 +35,6 @@ def update_module_and_course_completion(sender, instance, **kwargs):
         certificate = generate_certificate(student_name, course_name)
         
         # Marcar o curso como concluído
-        StudentCourse.objects.update_or_create(
-            student=student, course=course, certificate=certificate,
-            defaults={'completed': True}
-        )
+        StudentCourse.objects.update(
+            student=student, course=course, 
+            certificate=certificate, completed=True)

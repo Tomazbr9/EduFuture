@@ -17,45 +17,87 @@ from courses.serializers import (
 )
 
 class CourseViewSet(ModelViewSet):
+    # Define o conjunto de consultas padrão para os cursos.
     queryset = Course.objects.all()
+    
+    # Especifica o serializer a ser utilizado para serializar os objetos do modelo.
     serializer_class = CourseSerializer
 
     def get_permissions(self):
+        """
+        Define as permissões com base na ação realizada.
+        """
         if self.action in ['list', 'retrieve']:
+            # Permite acesso irrestrito para visualizar a lista de cursos ou detalhes individuais.
             permission_classes = [AllowAny]
         else:
-            permission_classes = [IsInstructor]
-        return [permission() for permission in permission_classes]
-            
-class ModuleViewSet(ModelViewSet):
-    queryset = Module.objects.all()
-    serializer_class = ModuleSerializer
-    
-    def get_permissions(self):
-        if self.action in ['list', 'retrieve']:
-            permission_classes = [AllowAny]
-        else:
+            # Restringe ações como criação, atualização e exclusão a instrutores.
             permission_classes = [IsInstructor]
         
+        # Instancia e retorna as permissões configuradas.
         return [permission() for permission in permission_classes]
+
+            
+class ModuleViewSet(ModelViewSet):
+    # Define o conjunto de consultas padrão para os módulos.
+    queryset = Module.objects.all()
+    
+    # Especifica o serializer a ser utilizado para serializar os objetos do modelo.
+    serializer_class = ModuleSerializer
+
+    def get_permissions(self):
+        """
+        Define as permissões com base na ação realizada.
+        """
+        if self.action in ['list', 'retrieve']:
+            # Permite acesso irrestrito para visualizar a lista de módulos ou detalhes individuais.
+            permission_classes = [AllowAny]
+        else:
+            # Restringe ações como criação, atualização e exclusão a instrutores.
+            permission_classes = [IsInstructor]
+        
+        # Instancia e retorna as permissões configuradas.
+        return [permission() for permission in permission_classes]
+
 
 
 class ClassViewSet(ModelViewSet):
+    # Define o conjunto de consultas padrão para as aulas.
     queryset = Class.objects.all()
+
+    # Especifica o serializer a ser utilizado para serializar os objetos do modelo.
     serializer_class = ClassSerializer
 
     def get_permissions(self):
+        """
+        Define as permissões com base na ação realizada.
+        """
+        # Restringe o acesso para verificar se o usuário comprou o curso ou se ele é o instrutor da classe.
         permission_classes = [VerifyCoursePurchase]     
         return [permission() for permission in permission_classes]
     
     def partial_update(self, request, *args, **kwargs):
-        allowed_fields = ['completed']
+        """
+        Permite a atualização parcial de uma aula, mas com restrições específicas.
+        """
+        allowed_fields = ['completed']  # Define que apenas o campo 'completed' pode ser atualizado.
 
-        if any(field not in allowed_fields for field in request.data.keys()):
-            raise PermissionDenied("Você só pode atualizar o campo permitido.")
         
-        return super().partial_update(request, *args, **kwargs)
-    
+        user = Student.objects.get(user=request.user)
+        
+        # Obtém o instrutor associado à aula (o instrutor do curso do módulo).
+        course_instructor = self.get_object().module.course.instructor
+
+        # verificar isso aqui amanhã
+
+        # Se o instrutor for criador do curso, permite a atualização completa.
+        if user == course_instructor:
+            return super().partial_update(request, *args, **kwargs)
+        # Caso contrário, verifica se está tentando atualizar apenas campos permitidos.
+        elif any(field not in allowed_fields for field in request.data.keys()):
+            # Se tentar atualizar campos não permitidos, lança um erro de permissão.
+            raise PermissionDenied("Você só pode atualizar o campo permitido.")
+
 class StudentViewSet(ModelViewSet):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
