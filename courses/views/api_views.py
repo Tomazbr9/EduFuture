@@ -81,14 +81,10 @@ class ClassViewSet(ModelViewSet):
         Permite a atualização parcial de uma aula, mas com restrições específicas.
         """
         allowed_fields = ['completed']  # Define que apenas o campo 'completed' pode ser atualizado.
-
-        
         user = Student.objects.get(user=request.user)
         
         # Obtém o instrutor associado à aula (o instrutor do curso do módulo).
         course_instructor = self.get_object().module.course.instructor
-
-        # verificar isso aqui amanhã
 
         # Se o instrutor for criador do curso, permite a atualização completa.
         if user == course_instructor:
@@ -99,31 +95,58 @@ class ClassViewSet(ModelViewSet):
             raise PermissionDenied("Você só pode atualizar o campo permitido.")
 
 class StudentViewSet(ModelViewSet):
+    # Define o conjunto de dados padrão para a visualização.
     queryset = Student.objects.all()
+
+    # Especifica o serializer que será usado para os objetos do modelo.
     serializer_class = StudentSerializer
 
     def get_queryset(self):
-        user = self.request.user
+        """
+        Sobrescreve o método get_queryset para restringir os dados exibidos.
+        """
+        user = self.request.user  # Obtém o usuário autenticado da requisição.
+        # Filtra os objetos do queryset para incluir apenas o estudante associado ao usuário.
         return self.queryset.filter(user=user)
+
 
 class StudentClassViewSet(ModelViewSet):
     queryset = StudentClass.objects.all()
     serializer_class = StudentClassSerializer
 
+    def partial_update(self, request, *args, **kwargs):
+        # Recupera o aluno associado ao usuário autenticado.
+        student = Student.objects.get(user=request.user)
+        
+        # Recupera a aula que está sendo atualizada.
+        cls = self.get_object()
+
+        # Verifica se a aula pertence ao aluno autenticado.
+        if cls.student != student:
+            raise PermissionDenied("Não é possível atualizar as aulas de outros alunos!!")
+        
+        # Caso a verificação seja bem-sucedida, permite a atualização parcial.
+        return super().partial_update(request, *args, **kwargs)
+
 class RegisterUserApiView(APIView):
     """
-    View utilizada para fazer registros de usuarios
+    View utilizada para fazer registros de usuários
     """
 
     def post(self, request) -> Response:
+        # Inicializa o serializer com os dados fornecidos na requisição.
         serializer = UserRegistrationSerializer(data=request.data)
 
+        # Verifica se os dados fornecidos são válidos.
         if serializer.is_valid():
+            # Salva o novo usuário caso os dados sejam válidos.
             serializer.save()
             return Response(
                 {'message': 'Usuário criado com sucesso'}, 
                 status=status.HTTP_201_CREATED
             )
+        
+        # Retorna erros de validação caso os dados sejam inválidos.
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class UpdateUserApiView(APIView):
@@ -132,16 +155,23 @@ class UpdateUserApiView(APIView):
     """
 
     def patch(self, request, pk: int) -> Response:
+        # Recupera o usuário pelo ID (pk). Retorna 404 se o usuário não for encontrado.
         user = get_object_or_404(User, pk=pk)
+        
+        # Inicializa o serializer com o usuário encontrado e os dados fornecidos para atualização parcial.
         serializer = UserUpdateSerializer(user, data=request.data, partial=True)
+        
+        # Verifica se os dados fornecidos são válidos.
         if serializer.is_valid():
+            # Atualiza o usuário com os dados validados.
             serializer.save()
             return Response(
                 {'message': 'Usuário atualizado com sucesso.'},
                 status=status.HTTP_200_OK
             )
+        
+        # Retorna erros de validação caso os dados sejam inválidos.
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
 
 class LoginApiView(APIView):
     """
@@ -149,51 +179,56 @@ class LoginApiView(APIView):
     """
 
     def post(self, request):
+        # Recupera o nome de usuário e a senha dos dados da requisição.
         username = request.data.get('username')
         password = request.data.get('password')
         
+        # Verifica se o nome de usuário e a senha foram fornecidos.
         if not username or not password:
             return Response(
                 {'message': 'Usuário ou Senha inválidos'}, 
                 status=status.HTTP_401_UNAUTHORIZED)
         
+        # Autentica o usuário com as credenciais fornecidas.
         user = authenticate(username=username, password=password)
 
+        # Retorna erro se as credenciais forem inválidas.
         if user is None:
             return Response(
                 {'detail': 'Credenciais inválidas'}, 
                 status=status.HTTP_401_UNAUTHORIZED)
         
-        reflesh = RefreshToken.for_user(user)
-        access_token = str(reflesh.access_token) # type: ignore
+        # Gera um token de acesso (JWT) para o usuário autenticado.
+        refresh = RefreshToken.for_user(user)
+        access_token = str(refresh.access_token) # type: ignore
 
-        print(access_token)
-
+        # Registra o token na sessão do usuário.
         request.session['access_token'] = access_token
 
+        # Retorna mensagem de sucesso no login.
         return Response(
-            {'message': 'login bem-sucedido!'}
+            {'message': 'Login bem-sucedido!'}
         )
+
         
 class BuyApiView(APIView):
     """
-    API View Utilizada para vincular aluno e curso 
+    API View utilizada para vincular aluno e curso.
     """
 
+    # Define que a autenticação é necessária para acessar a API.
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
+        # Cria uma instância do serializer com os dados da requisição.
         serializer = StudentCourseSerializer(
             data=request.data, context={'request': request})
 
+        # Verifica se os dados enviados são válidos.
         if serializer.is_valid():
+            # Salva a associação do aluno com o curso.
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         
+        # Retorna os erros de validação, se houver.
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-
-        
-
-

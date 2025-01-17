@@ -60,14 +60,11 @@ class VerifyCoursePurchase(permissions.BasePermission):
             if course.instructor == student:
                 return True
         
-        if view.action in ['list', 'retrieve', 'partial_update']:
+        if view.action in ['list', 'retrieve']:
             if not StudentCourse.objects.filter(student=student, course=course).exists():
                 raise PermissionDenied('É necessario comprar o curso para assistir as aulas!')
             else:
                 return True
-        
-        # if obj.module.course.instructor.user == request.user:
-        #     return True
         
 
 
