@@ -40,6 +40,7 @@ class Course(Base):
     image = models.ImageField(upload_to='courses', blank=True, null=True)
     instructor = models.ForeignKey(
         Student, related_name='courses', on_delete=models.SET_NULL, null=True, blank=True)
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self) -> str:
         return self.name

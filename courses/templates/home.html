@@ -4,19 +4,39 @@
 <div class="container-banner-home">
     <img src="{% static "img/banner edufuture.png" %}" class="img-banner" alt="logo edufuture">
 </div>
-<div class="container-presentation-text">
+<div class="container-presentation-text content-center">
     <h2 class="presentation-text">Todos os conhecimetos necessarios em um só lugar<h2>
     <p class="presentation-sub-text">Cursos completos e qualificados apoiados pela EduFuture<p>
 </div>
-<div class="course-container">
+<div class="course-container content-center">
     <div class="container my-5">
-        <div class="d-flex flex-row flex-wrap justify-content-between">
-            <div class="card m-2">
-                <img src="" class="card-img-top" aut="">
-                <h5 class="card-title"></h5>
-                <p class="card-text"></p>
-                <p class="text-primary fw-bold"></p>
+        <h3 class="mb-4">Personalized Recommendations</h3>
+        <div id="courseCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                {% for i in courses %}  <!-- Divisão dos cursos em grupos de 5 -->
+                    <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                        <div class="d-flex justify-content-between">
+                            {% for course in courses|slice:":5" %}
+                                <div class="course-card">
+                                    <img src="{{ course.image.url }}" class="d-block w-100" alt="{{ course.name }}">
+                                    <h5 class="card-title mt-2">{{ course.name }}</h5>
+                                    <p class="card-text">{{ course.description }}</p>
+                                    <p class="text-primary fw-bold">R${{ course.price }}</p>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
             </div>
+
+            <button class="carousel-control-prev" type="button" data-bs-target="#courseCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#courseCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
         </div>
     </div>
 </div>
