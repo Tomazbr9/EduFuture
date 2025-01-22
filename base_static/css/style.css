@@ -1,6 +1,7 @@
 :root {
     --primary-color: #ff66c4;
     --second-color: #97cfca;
+    --terciary-color: #1F271B;
 }
 
 body {
@@ -12,7 +13,6 @@ body {
     margin: 0 auto;
     max-width: 1200px;
 }
-
 
 /* header */
 
@@ -68,19 +68,101 @@ body {
     font-size: 20px;
 }
 
-.course-card {
-    border: 1px solid #ddd;
-    border-radius: 5px;
+/* Container geral do carrossel */
+.carousel-container {
+    position: relative;
+    width: 100%;
     overflow: hidden;
-    padding: 10px;
-    transition: transform 0.2s ease;
-    max-width: 250px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+  }
+  
+  /* Wrapper para os slides */
+  .carousel-wrapper {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+  }
+  
+  /* Cada slide */
+  .carousel-slide {
+    display: flex;
+    flex-shrink: 0;
+    width: 100%;
+    justify-content: space-around;
+    gap: 30px;
+  }
+  
+  /* Card de curso */
+  .card {
+    width: 18%;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    text-align: center;
+    background-color: #fff;
+  }
+
+.card-direction {
+    text-decoration: none;
 }
-.course-card:hover {
-    transform: scale(1.05);
-}
-.course-card img {
+  
+  .card-img {
     width: 100%;
     height: 150px;
     object-fit: cover;
-}
+  }
+  
+  .card-content {
+    padding: 10px;
+  }
+  
+  .card-title {
+    font-size: 16px;
+    text-align: start;
+    font-weight: bold;
+    margin: 0 !important;
+    color: var(--terciary-color) !important;
+  }
+  
+  .card-text {
+    font-size: 14px;
+    text-align: start;
+    color: #555;
+    margin: 2px 0;
+  }
+  
+  .card-price {
+    font-size: 16px;
+    text-align: start;
+    color: var(--terciary-color);
+    font-weight: bold;
+  }
+  
+  /* Botões de navegação */
+  .carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    z-index: 10;
+  }
+  
+  .prev-btn {
+    left: 1px;
+  }
+  
+  .next-btn {
+    right: 1px;
+  }
+  
+  .carousel-btn:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+  }
+  
