@@ -1,40 +1,50 @@
 {% extends "base.html" %}
 {% load static %}
 {% block main_content %}
-<div class="container-banner-home">
-    <img src="{% static "img/banner edufuture.png" %}" class="img-banner" alt="logo edufuture">
-</div>
-<div class="container-presentation-text content-center">
-    <h2 class="presentation-text">Todos os conhecimetos necessarios em um só lugar<h2>
-    <p class="presentation-sub-text">Cursos completos e qualificados apoiados pela EduFuture<p>
+<div class="content-center container-banners">
+  <div id="carouselExampleInterval" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-inner">
+      <div class="carousel-item active" data-bs-interval="10000">
+        <img src="{% static "img/banner edufuture um.png" %}" class="d-block w-100 banner" alt="...">
+      </div>
+      <div class="carousel-item" data-bs-interval="10000">
+        <img src="{% static "img/banner edufuture dois.png" %}" class="d-block w-100 banner" alt="...">
+      </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
 </div>
 <div class="course-container content-center">
-    <div id="carousel" class="carousel-container">
-        <div class="carousel-wrapper">
-          {% for group in grouped_courses %}
-            <div class="carousel-slide">
-              {% for course in group %}
-                <div class="card">
-                   <a class="card-direction" href="#">
-                        <img src="{{ course.image.url }}" alt="{{ course.name }}" class="card-img">
-                        <div class="card-content">
-                            <h5 class="card-title">{{ course.name }}</h5>
-                            <p class="card-text">{{ course.instructor.user.first_name}} {{ course.instructor.user.last_name}}</p>
-                            <p class="card-price">R$ {{ course.price }}</p>
-                        </div>
-                    </a>
-                </div>
-              {% endfor %}
-            </div>
-          {% endfor %}
-        </div>
-        <button class="carousel-btn prev-btn" onclick="moveCarousel(-1)">&#10094;</button>
-        <button class="carousel-btn next-btn" onclick="moveCarousel(1)">&#10095;</button>
-    </div>
-    <div>
-        <div class="container-presentation-text content-center">
-            <h2 class="presentation-text">Cursos do seu interesse<h2>
-        </div> 
-    </div>      
+  <div class="container-presentation-text">
+    <h2 class="presentation-text">Todos os conhecimentos necessários em um só lugar</h2>
+    <p class="presentation-sub-text">Cursos completos e qualificados apoiados pela EduFuture</p>
+  </div>
+  {% include "partials/carousel.html" with grouped_courses=all_courses carousel_id="allCourses" %}
+  {% if user.isauthenticated %}
+      <div class="container-presentation-text">
+          <h2 class="presentation-text">Cursos do seu interesse</h2>
+      </div>
+      {% include "partials/carousel.html" with grouped_courses=courses_interest carousel_id="coursesInterest" %}
+  {% else %}
+      <div class="container-presentation-text">
+          <h2 class="presentation-text">Cursos de Tecnologia e Software</h2>
+      </div>
+      {% include "partials/carousel.html" with grouped_courses=technology_courses carousel_id="technology_courses" %}
+      <div class="container-presentation-text">
+          <h2 class="presentation-text">Cursos de Sáude e Fitness</h2>
+      </div>
+      {% include "partials/carousel.html" with grouped_courses=health_courses carousel_id="health_courses" %}
+      <div class="container-presentation-text">
+          <h2 class="presentation-text">Cursos de Finanças</h2>
+      </div>
+      {% include "partials/carousel.html" with grouped_courses=finance_courses carousel_id="finance_courses" %}
+  {% endif %}
 </div>
 {% endblock main_content %}

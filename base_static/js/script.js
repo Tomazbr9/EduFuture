@@ -1,9 +1,10 @@
 let currentSlide = 0;
 
-function moveCarousel(direction) {
-  const carouselWrapper = document.querySelector('.carousel-wrapper');
-  const totalSlides = document.querySelectorAll('.carousel-slide').length;
-
+function moveCarousel(carousel_id, direction) {
+  const carouselWrapper = document.querySelector(`.carousel-wrapper-${carousel_id}`);
+  const totalSlides = document.querySelectorAll(`.carousel-wrapper-${carousel_id} .carousel-slide`).length;
+  
+  console.log(totalSlides)
   // Atualiza o índice do slide
   currentSlide += direction;
 

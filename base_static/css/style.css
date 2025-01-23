@@ -51,6 +51,14 @@ body {
     max-height: 430px;
 }
 
+.container-banners {
+  margin-top: 30px;
+}
+
+.banner {
+ height: 400px;
+}
+
 .container-presentation-text {
     margin-top: 30px;
 }
@@ -88,7 +96,7 @@ body {
     display: flex;
     flex-shrink: 0;
     width: 100%;
-    justify-content: space-around;
+  
     gap: 30px;
   }
   
@@ -166,3 +174,25 @@ body {
     background-color: rgba(0, 0, 0, 0.8);
   }
   
+/* footer */
+
+.footer {
+  background-color: #1F271B;
+  margin-top: 20px;
+}
+
+.text-footer {
+  color: #ffffff;
+}
+
+.bi-twitter-x {
+  color: #ffffff;
+}
+
+.nav-icons {
+  padding: 15px;
+}
+
+.icon-footer {
+  font-size: 20px
+}
