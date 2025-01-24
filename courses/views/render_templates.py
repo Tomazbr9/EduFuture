@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from utils.other_functions import slice_courses
 from courses.models import Course, Student
 
@@ -34,3 +34,14 @@ def home(request):
     }
 
     return render(request, 'home.html', context)
+
+
+def course(request, course_id):
+    course = get_object_or_404(Course, pk=course_id)
+
+    context = {
+        'course': course
+    }
+
+    return render(request, 'course.html', context)
+

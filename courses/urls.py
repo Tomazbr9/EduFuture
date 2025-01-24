@@ -16,5 +16,7 @@ urlpatterns = [
     path('login/', views.LoginApiView.as_view(), name='login'),
     path('buy/', views.BuyApiView.as_view(), name='buy'),
 
-    path('home/', views.home, name='home')
+    path('home/', views.home, name='home'),
+    path('course/<int:course_id>/', views.course, name='course'),
+
 ]
