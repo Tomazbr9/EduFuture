@@ -17,6 +17,7 @@ class Category(Base):
 # Modelo de determina se o usario é um aluno ou instrutor
 class Student(Base):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='profiles', default='profiles/sem_perfil.jpg')
     age = models.DateField()
     is_instructor = models.BooleanField(default=False)
     description = models.TextField(blank=True, null=True)
@@ -36,6 +37,7 @@ class Address(Base):
 class Course(Base):
     name = models.CharField(max_length=255)
     description = models.TextField(max_length=255)
+    objective = models.TextField(default='')
     price = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal('0.0'))
     image = models.ImageField(upload_to='courses', blank=True, null=True)
     instructor = models.ForeignKey(

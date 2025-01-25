@@ -5,7 +5,7 @@
         <div class="carousel-slide">
           {% for course in group %}
             <div class="card">
-               <a class="card-direction" href="#">
+               <a class="card-direction" href="{% url "course" course.pk %}">
                     <img src="{{ course.image.url }}" alt="{{ course.name }}" class="card-img">
                     <div class="card-content">
                         <h5 class="card-title">{{ course.name }}</h5>

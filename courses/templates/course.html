@@ -1,17 +1,39 @@
 {% extends "base.html" %}
+{% load static %}
 {% block main_content %}
-<session class="course-wrapper">
-    <div class="content-center">
-        <div>
-            <h2>Curso: {{course.name}}<h2>
-            <p class="">{{course.description}}</p>
-        </div>
-        <div>
+<div class="container-course-wrapper">
+    <div class="course-wrapper">
+        <div class="content-center container-course-info">
             <div>
+                <h2 class="title-course">{{course.name}}<h2>
+                <p class="description-course">{{course.description}}</p>
+            </div>
+            <div>
+                <div>
 
+                </div>
             </div>
         </div>
     </div>
-</session>
+    <div class="content-center container-learn">
+        <div class="learn-one">
+            <h2 class="topic_title">O que você vai aprender:</h2>
+            <ul>
+            {% for learn in learning_list %}
+                <li class="items-learn">{{learn}}</li>
+            {% endfor %}
+            </ul>
+        </div>
+        <div class="container-instructor">
+            <div class="instructor-info">
+                <img src="{{course.instructor.image.url}}" class="" alt="">
+                <p>{{course.instructor.user.first_name}} {{course.instructor.user.last_name}}</p>
+            </div>
+            <div>
+                <p>{{course.instructor.description}}</p>
+            </div>
+        </div>
+    </div>
+</div>
 
 {% endblock main_content %}

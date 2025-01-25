@@ -197,3 +197,58 @@ body {
 .icon-footer {
   font-size: 20px
 }
+
+
+/* Course */
+
+.description-course {
+  color: #ffffff;
+  font-size: 20px;
+  font-weight: 400;
+  overflow-wrap: break-word;
+}
+
+.container-course-info {
+  background-image: url("https://ascenty.com/wp-content/uploads/2022/04/tecnologia-na-educa%C3%A7%C3%A3o-1920x1000-c-default.png");
+  background-size: cover;
+  max-width: 100%;
+  padding: 100px 175px;
+}
+
+.course-wrapper {
+  margin-bottom: 30px;
+}
+
+.title-course {
+  color: #ffffff;
+  font-size: 45px;
+}
+
+.topic_title {
+  font-size: 35px;
+  margin-bottom: 20px;
+}
+
+.container-learn ul {
+  list-style: none;
+}
+
+.items-learn {
+  font-size: 20px;
+  padding: 10px 0;
+}
+
+.items-learn::before {
+    content: "✔";
+    color: var(--primary-color);
+}
+
+.container-instructor {
+  display: flex;
+  flex-direction: column;
+}
+
+.instructor-info {
+  display: flex;
+  gap: 15px;
+}

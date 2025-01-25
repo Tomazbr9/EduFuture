@@ -38,9 +38,13 @@ def home(request):
 
 def course(request, course_id):
     course = get_object_or_404(Course, pk=course_id)
+    
+    # Lista de Objetivos de aprendizado
+    learning_list = course.objective.split('\n')
 
     context = {
-        'course': course
+        'course': course,
+        'learning_list': learning_list
     }
 
     return render(request, 'course.html', context)
