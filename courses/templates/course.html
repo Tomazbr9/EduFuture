@@ -26,11 +26,11 @@
         </div>
         <div class="container-instructor">
             <div class="instructor-info">
-                <img src="{{course.instructor.image.url}}" class="" alt="">
-                <p>{{course.instructor.user.first_name}} {{course.instructor.user.last_name}}</p>
+                <img src="{{course.instructor.image.url}}" class="profile-instructor-image" alt="">
+                <p><b>{{course.instructor.user.first_name}} {{course.instructor.user.last_name}}</b></p>
             </div>
-            <div>
-                <p>{{course.instructor.description}}</p>
+            <div class="container-instructor-description">
+                <p class="instructor-description">{{course.instructor.description}}</p>
             </div>
         </div>
     </div>
