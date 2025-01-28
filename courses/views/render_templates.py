@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from utils.other_functions import slice_courses
-from courses.models import Course, Student
+from courses.models import Course, Student, StudentCourse
 
 
 def home(request):
@@ -42,9 +42,15 @@ def course(request, course_id):
     # Lista de Objetivos de aprendizado
     learning_list = course.objective.split('\n')
 
+    # Quantidade de alunos matriculados
+    number_of_students = StudentCourse.objects.filter(course=course).count()
+    print(number_of_students)
+    
+
     context = {
         'course': course,
-        'learning_list': learning_list
+        'learning_list': learning_list,
+        'number_of_students': number_of_students
     }
 
     return render(request, 'course.html', context)

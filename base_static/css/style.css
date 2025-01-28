@@ -209,6 +209,9 @@ body {
 }
 
 .container-course-info {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
   background-image: url("https://ascenty.com/wp-content/uploads/2022/04/tecnologia-na-educa%C3%A7%C3%A3o-1920x1000-c-default.png");
   background-size: cover;
   max-width: 100%;
@@ -231,6 +234,7 @@ body {
 
 .container-learn {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
 }
 
@@ -244,8 +248,15 @@ body {
 }
 
 .items-learn::before {
-    content: "✔";
-    color: var(--primary-color);
+  content: "✔";
+  color: var(--primary-color);
+}
+
+.container-info-course {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 1px 2px 1px rgb(0, 0, 0, 0.2);
 }
 
 .container-instructor {
@@ -259,12 +270,74 @@ body {
   gap: 15px;
 }
 
+.instructor-info {
+  display: flex;
+  align-items: center;
+}
+
+.name-instructor {
+  font-size: 25px;
+  font-weight: 500;
+}
+
 .profile-instructor-image {
-  width: 20px;
+  width: 80px;
   object-fit: cover;
+  border-radius: 50px;
 }
 
 .container-instructor-description {
   width: 400px;
 }
 
+
+.container-info-course-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+    width: 470px;
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 1px 1px 2px rgb(0, 0, 0, 0.2);
+}
+
+.item-grid {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.icon-course {
+  font-size: 50px;
+}
+
+.content-info-course p {
+  margin: 0;
+}
+
+.icon-course {
+  color: var(--primary-color);
+}
+
+.text-title-grid {
+  font-weight: 500;
+  color: var(--primary-color);
+}
+
+
+.content-course {
+  background-color: #ffffff;
+  width: 100%;
+  padding: 20px;
+}
+
+.module-content {
+  border: 1px solid rgb(0, 0, 0, 0.5);
+  background-color: var(--second-color);
+  padding: 10px;
+}
+
+.content-class {
+  display: none;
+}

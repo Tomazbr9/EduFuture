@@ -8,9 +8,34 @@
                 <h2 class="title-course">{{course.name}}<h2>
                 <p class="description-course">{{course.description}}</p>
             </div>
-            <div>
-                <div>
-
+            <div class="container-info-course-grid">
+                <div class="course-time item-grid">
+                    <i class="bi icon-course bi-clock-history"></i>
+                    <div class="content-info-course">
+                        <p class="text-title-grid">8h</p>
+                        <p>Para conclusão</p>
+                    </div>
+                </div>
+                <div class="average-rating item-grid">
+                    <i class="bi icon-course bi-star"></i>
+                    <div class="content-info-course">
+                        <p class="text-title-grid">9.2</p>
+                        <p>Avaliação Média</p>
+                    </div>
+                </div>
+                <div class="number-students item-grid">
+                    <i class="bi icon-course bi-people"></i>
+                    <div class="content-info-course">
+                        <p class="text-title-grid">{{number_of_students}}</p>
+                        <p>Pessoas nesse curso</p>
+                    </div>
+                </div>
+                <div class="certificate item-grid">
+                    <i class="bi icon-course bi-file-earmark-text"></i>
+                    <div class="content-info-course">
+                        <p class="text-title-grid">Certificado</p>
+                        <p>De participação</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -24,13 +49,27 @@
             {% endfor %}
             </ul>
         </div>
-        <div class="container-instructor">
+        <div class="container-instructor container-info-course">
             <div class="instructor-info">
                 <img src="{{course.instructor.image.url}}" class="profile-instructor-image" alt="">
-                <p><b>{{course.instructor.user.first_name}} {{course.instructor.user.last_name}}</b></p>
+                <p class="name-instructor">{{course.instructor.user.first_name}} {{course.instructor.user.last_name}}</p>
             </div>
             <div class="container-instructor-description">
                 <p class="instructor-description">{{course.instructor.description}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="container-content-course content-center">
+        <h2>Conteúdo do Curso</h2>
+        <div class="content-course">
+            <div class="module-content">
+                Modulo 1
+                <div class="content-class">
+                    <div class="class-item">aula 1</div>
+                    <div class="class-item">aula 2</div>
+                    <div class="class-item">aula 3</div>
+                    <div class="class-item">aula 4</div>
+                </div>
             </div>
         </div>
     </div>
