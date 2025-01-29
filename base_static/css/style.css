@@ -340,4 +340,53 @@ body {
 
 .content-class {
   display: none;
+  background-color: #ffffff;
+  padding: 10px;
+  width: 100%;
 }
+
+.module {
+  display: flex;
+  gap: 15px;
+}
+
+.module p {
+    margin: 0;
+    font-weight: 600;
+}
+
+.module i {
+  cursor: pointer;
+  padding: 0 3.5px;
+  border-radius: 50%;
+  transition: background-color 0.3s ease-in;
+}
+
+.module i:hover {
+  background-color: var(--primary-color);
+}
+
+.class-item {
+  font-weight: 500;
+}
+
+.container-name-price {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.price-course {
+  background-color: var(--primary-color);
+  border-radius: 20px;
+  padding: 10px;
+}
+
+.price-course p {
+  margin: 0;
+  font-size: 30px;
+  color: #ffffff;
+}
+
+
+ 

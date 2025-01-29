@@ -44,8 +44,6 @@ def course(request, course_id):
 
     # Quantidade de alunos matriculados
     number_of_students = StudentCourse.objects.filter(course=course).count()
-    print(number_of_students)
-    
 
     context = {
         'course': course,
