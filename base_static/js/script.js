@@ -31,3 +31,14 @@ function displayClasses(idModule){
       arrow.classList.replace('bi-chevron-up', 'bi-chevron-down') 
     }
 }
+
+
+function showModal(){
+  const modal = new bootstrap.Modal(document.getElementById('modalBuy'))
+  modal.show()
+}
+
+
+function freeze(){
+  
+}

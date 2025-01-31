@@ -1,6 +1,7 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from utils.other_functions import slice_courses
 from courses.models import Course, Student, StudentCourse
+from decimal import Decimal
 
 
 def home(request):
@@ -53,3 +54,31 @@ def course(request, course_id):
 
     return render(request, 'course.html', context)
 
+def add_to_cart(request, course_id):
+
+    course = get_object_or_404(Course, pk=course_id)
+
+    cart = request.session.get('cart', {})
+    
+    first_name = course.instructor.user.first_name # type: ignore
+    last_name = course.instructor.user.last_name # type: ignore
+    name_instructor = f'{first_name} {last_name}'
+
+    if not str(course.pk) in cart:
+        cart[str(course.pk)] = {
+            'name': str(course.name),
+            'price': float(course.price),
+            'instructor': name_instructor,
+            'image': str(course.image)
+        }
+
+    request.session['cart'] = cart
+    
+    return redirect('cart')
+
+    
+
+def cart_view(request):
+    
+
+    return render(request, 'cart.html')

@@ -11,6 +11,7 @@
                 </div>
                 <div class="price-course">
                     <p>R$ {{course.price}}</p>
+                    <a href="{% url "add-to-cart" course.pk %}" class="btn-buy" onclick="showModal()">Adicionar ao carrinho</a>
                 </div>
             </div>
             <div class="container-info-course-grid">
@@ -90,6 +91,18 @@
         {% endif %}
         </div>
     </div>
+    <div class="modal fade" id="modalBuy" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-body">
+              <p>Curso adicionado ao carrinho</p>
+            </div>
+            <div class="modal-footer">
+              <a href="{% url "home" %}" class="btn btn-secondary" data-bs-dismiss="modal">Continuar comprando</a>
+              <a href="" class="btn btn-primary">Ir para o carrinho</a>
+            </div>
+          </div>
+        </div>
+    </div>
 </div>
-
 {% endblock main_content %}
