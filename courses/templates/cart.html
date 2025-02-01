@@ -2,16 +2,20 @@
 {% block main_content %}
 <div class="content-center container-cart-wrapper">
     <h1>Carrinho<h1>
-    <p class="text-sub-">n um curso no carrinho</p>
+    <p class="presentation-sub-text">n um curso no carrinho</p>
 
     <div class="container-course-cart">
-        <div>
-            <img class="course-img-cart" src="" alt="">
-        </div>
-        <div>
-            <a class="presentation-text">Curso qualquer</a>
-            <p class="presentation-sub-text">nome do professor</p>
-        </div>
+        {% for course_id, course in cart.items %}
+            <div class="content-course-cart">
+                <div>
+                    <img class="course-img-cart" src="{{course.image}}" alt="{{course.name}}">
+                </div>
+                <div>
+                    <a class="presentation-text">{{course.name}}</a>
+                    <p class="presentation-sub-text">{{course.instructor}}</p>
+                </div>
+            </div>
+        {% endfor %}
     </div>
 <div>
 {% endblock main_content %}

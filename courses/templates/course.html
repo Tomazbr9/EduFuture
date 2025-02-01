@@ -11,7 +11,7 @@
                 </div>
                 <div class="price-course">
                     <p>R$ {{course.price}}</p>
-                    <a href="{% url "add-to-cart" course.pk %}" class="btn-buy" onclick="showModal()">Adicionar ao carrinho</a>
+                    <button type="button" class="btn-buy" onclick="showModal(event, '{{course.pk}}')">Adicionar ao carrinho</button>
                 </div>
             </div>
             <div class="container-info-course-grid">
@@ -98,8 +98,8 @@
               <p>Curso adicionado ao carrinho</p>
             </div>
             <div class="modal-footer">
-              <a href="{% url "home" %}" class="btn btn-secondary" data-bs-dismiss="modal">Continuar comprando</a>
-              <a href="" class="btn btn-primary">Ir para o carrinho</a>
+              <a href="{% url "home" %}" class="btn btn-secondary">Continuar comprando</a>
+              <a href="{% url "cart" %}" class="btn btn-primary">Ir para o carrinho</a>
             </div>
           </div>
         </div>

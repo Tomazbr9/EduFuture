@@ -69,7 +69,7 @@ def add_to_cart(request, course_id):
             'name': str(course.name),
             'price': float(course.price),
             'instructor': name_instructor,
-            'image': str(course.image)
+            'image': course.image.url
         }
 
     request.session['cart'] = cart
@@ -80,5 +80,13 @@ def add_to_cart(request, course_id):
 
 def cart_view(request):
     
+    cart = request.session.get('cart', {})
 
-    return render(request, 'cart.html')
+    context = {
+        'cart': cart
+    }
+
+    for i, j in cart.items():
+        print('id: ', i, ' itens: ', j)
+
+    return render(request, 'cart.html', context)

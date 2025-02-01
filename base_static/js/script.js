@@ -33,12 +33,14 @@ function displayClasses(idModule){
 }
 
 
-function showModal(){
-  const modal = new bootstrap.Modal(document.getElementById('modalBuy'))
-  modal.show()
-}
-
-
-function freeze(){
-  
+function showModal(event, idCourse){
+    event.preventDefault()
+    
+    fetch(`/courses/add_to_cart/${idCourse}/`, {
+      method: 'GET'
+    }).then(()=>{
+      let modal = new bootstrap.Modal(document.getElementById('modalBuy'))
+      modal.show()
+    })
+    .catch(error => console.error('Erro na requisição: ', error))
 }
