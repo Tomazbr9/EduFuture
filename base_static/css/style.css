@@ -412,7 +412,6 @@ body {
 }
 
 .container-course-cart {
-  border-top: 1px solid #000000;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -420,10 +419,47 @@ body {
 
 .content-course-cart {
   display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid #000000;
+  gap: 20px;
 }
 
 .quantity-course-cart {
   font-size: 10px;
 }
 
+.course-img-cart {
+    object-fit: cover;
+    width: 140px;
+}
+
+.container-title-and-instructor-course a {
+  font-family: "Poppins", serif;
+  font-size: 30px;
+  text-decoration: none;
+  color: var(--terciary-color);
+  font-weight: 400;
+} 
+
+.container-title-and-instructor-course p {
+  font-size: 15px;
+}
+
+.container-info-course-cart {
+  display: flex;
+  gap: 20px;
+}
+
+.container-options-cart {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.container-options-cart p {
+  font-size: 20px;
+  margin: 0;
+}
  

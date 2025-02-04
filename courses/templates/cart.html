@@ -2,17 +2,23 @@
 {% block main_content %}
 <div class="content-center container-cart-wrapper">
     <h1>Carrinho<h1>
-    <p class="presentation-sub-text">n um curso no carrinho</p>
+    <p class="presentation-sub-text">{% if number_course_cart %}{{number_course_cart}}{% else %}0{% endif %} cursos no carrinho</p>
 
     <div class="container-course-cart">
         {% for course_id, course in cart.items %}
             <div class="content-course-cart">
-                <div>
-                    <img class="course-img-cart" src="{{course.image}}" alt="{{course.name}}">
+                <div class="container-info-course-cart">
+                    <div class="container-image-cart">
+                        <img class="course-img-cart" src="{{course.image}}" alt="{{course.name}}">
+                    </div>
+                    <div class="container-title-and-instructor-course">
+                        <a class="presentation-text">{{course.name}}</a>
+                        <p class="presentation-sub-text">{{course.instructor}}</p>
+                    </div>
                 </div>
-                <div>
-                    <a class="presentation-text">{{course.name}}</a>
-                    <p class="presentation-sub-text">{{course.instructor}}</p>
+                <div class="container-options-cart">
+                    <p>R$ {{course.price}}</p>
+                    <a href="{% url "remove-item-cart" course_id %}" class="presentation-sub-text" >Remover</a>
                 </div>
             </div>
         {% endfor %}

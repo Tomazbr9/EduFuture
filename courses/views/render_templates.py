@@ -76,17 +76,26 @@ def add_to_cart(request, course_id):
     
     return redirect('cart')
 
-    
+def remove_item_cart(request, item_id):
+
+    cart = request.session.get('cart')
+
+    # Deleta o item do carrinho
+    del cart[str(item_id)]
+    request.session['cart'] = cart
+
+    return redirect('cart')
 
 def cart_view(request):
     
     cart = request.session.get('cart', {})
 
-    context = {
-        'cart': cart
-    }
+    # obter numero de cursos no carrinho
+    number_course_cart = len(cart)
 
-    for i, j in cart.items():
-        print('id: ', i, ' itens: ', j)
+    context = {
+        'cart': cart,
+        'number_course_cart': number_course_cart
+    }
 
     return render(request, 'cart.html', context)
