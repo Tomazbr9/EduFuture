@@ -1,2 +1,4 @@
 from .api_views import *
-from .render_templates import *
+from .home_views import *
+from .cart_views import *
+from .authentication_views import *
