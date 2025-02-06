@@ -44,3 +44,15 @@ function showModal(event, idCourse){
     })
     .catch(error => console.error('Erro na requisição: ', error))
 }
+
+const categoryInput = document.getElementById('floatingCategory')
+const listCategories = document.getElementById('listCategories')
+categoryInput.addEventListener('click', ()=>{
+    listCategories.style.display = 'block'
+})
+
+function assignCategory(element){
+    let categoryInput = document.getElementById('floatingCategory') 
+    categoryInput.value = element.textContent
+    listCategories.style.display = 'none'    
+}

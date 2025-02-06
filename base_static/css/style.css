@@ -491,3 +491,41 @@ body {
   background-color: var(--primary-color) !important;
   color: #ffffff !important;
 }
+
+.form-control:focus {
+  border-color: var(--primary-color) !important;
+  box-shadow: 0 0 5px var(--primary-color) !important;
+}
+
+.register-link {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.form-check {
+  margin: 10px 0 !important;
+}
+
+.list-categories {
+  display: none;
+}
+
+.list-categories {
+  display: none;
+  padding: 0;
+  position: relative;
+  background-color: #ffffff;
+  box-shadow: 1px 1px 2px rgb(0, 0, 0, 0.2);
+  gap: 10px;
+}
+
+.list-categories li {
+  border-top: solid 0.5px rgba(0, 0, 0, 0.5);
+  list-style: none;
+  cursor: pointer;
+}
+
+.list-categories li:hover {
+  background-color: var(--primary-color);
+}
+

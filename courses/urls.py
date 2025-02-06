@@ -25,5 +25,6 @@ urlpatterns = [
     path('remove_item_cart/<int:item_id>/', views.remove_item_cart, name='remove-item-cart'),
     
     # urls login render
-    path('login_user/', views.login_view, name='login-user')
+    path('login_user/', views.login_view, name='login-user'),
+    path('register_user/', views.register_view, name='register-user')
 ]

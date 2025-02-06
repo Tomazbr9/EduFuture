@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block main_content %}
+<div class="adjust-form-login">
+    <form >
+        <h1 class="h3 mb-3 fw-normal">Registre-se</h1>
+
+        <div class="form-floating">
+            <input type="text" class="form-control" id="floatingUserName" placeholder="name@example.com" name="username">
+            <label for="floatingUserName">Nome de usuario</label>
+        </div>
+        <div class="form-floating">
+            <input type="email" class="form-control" id="floatingEmail" placeholder="Password" name="email">
+            <label for="floatingEmail">Email</label>
+        </div>
+        <div class="form-floating">
+            <input type="text" class="form-control" id="floatingName" placeholder="Password" name="first_name">
+            <label for="floatingName">Nome</label>
+        </div>
+        <div class="form-floating">
+            <input type="text" class="form-control" id="floatingLastName" placeholder="Password" name="last_name">
+            <label for="floatingLastName">Sobrenome</label>
+        </div>
+        <div class="form-floating">
+            <input type="date" class="form-control" id="floatingDate" placeholder="Password" name="age">
+            <label for="floatingDate">Data de nascimento</label>
+        </div>
+        <div class="form-floating">
+            <input type="password" class="form-control" id="floatingPassword" placeholder="Password" name="password">
+            <label for="floatingPassword">Senha</label>
+        <div class="form-floating">
+            <input type="text" class="form-control" id="floatingCategory" name="categories">
+            <label for="floatingCategory">Escolha uma Categoria de interesse</label>
+            <ul class="list-categories" id="listCategories">
+                {% for category in all_categories %}
+                    <li onclick="assignCategory(this)" id="category-{{category.pk}}">{{category.name}}</li>
+                {% endfor %}
+            </ul>
+        <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="flexCheckDefault" placeholder="Password" name="is_instructor">
+            <label for="flexCheckDefault" class="form-check-label">Deseja ser um instrutor?</label>
+        </div>
+        <button class="btn btn-login w-100 py-2" type="submit">Registrar</button>
+    </form>
+</div>
+{% endblock main_content %}
+
