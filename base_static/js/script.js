@@ -51,8 +51,46 @@ categoryInput.addEventListener('click', ()=>{
     listCategories.style.display = 'block'
 })
 
-function assignCategory(element){
-    let categoryInput = document.getElementById('floatingCategory') 
+function assignCategory(element, IdCategory){
+    let categoryInput = document.getElementById('floatingCategory')
+    const hiddenCategory = document.getElementById('hiddenCategory') 
     categoryInput.value = element.textContent
-    listCategories.style.display = 'none'    
+    listCategories.style.display = 'none'
+    hiddenCategory.value = IdCategory
 }
+
+
+document.getElementById("floatingDate").addEventListener("input", function (e) {
+    let value = e.target.value.replace(/\D/g, "") // Remove tudo que não for número
+    let formattedValue = ""
+
+    if (value.length > 2) {
+        formattedValue += value.substring(0, 2) + "/";
+    } else {
+        formattedValue += value
+    }
+    if (value.length > 4) {
+        formattedValue += value.substring(2, 4) + "/"
+    } else if (value.length > 2) {
+        formattedValue += value.substring(2);
+    }
+    if (value.length > 8) {
+        formattedValue += value.substring(4, 8)
+    } else if (value.length > 4) {
+        formattedValue += value.substring(4)
+    }
+
+    e.target.value = formattedValue
+
+    if(value.length === 8){
+      let day = value.substring(0, 2)
+      let month = value.substring(2, 4)
+      let year = value.substring(4)
+    
+      document.getElementById('hiddenDate').value = `${year}-${month}-${day}`
+
+    } else {
+      document.getElementById('hiddenDate').value = ''
+    }
+})
+
