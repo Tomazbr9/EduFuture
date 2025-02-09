@@ -45,6 +45,36 @@ function showModal(event, idCourse){
     .catch(error => console.error('Erro na requisição: ', error))
 }
 
+function loginUser(event) {
+  event.preventDefault();
+
+  const username = document.getElementById('floatingInputLogin').value
+  const password = document.getElementById('floatingPasswordLogin').value
+  const messageError = document.getElementById('messageError')
+
+  fetch(`/courses/login/`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ username, password })
+  })
+  .then(response => {
+    if(response.ok){
+      window.location.href = '/courses/home/'
+    }
+
+    return response.json()
+  })
+  .then(data => {
+    messageError.textContent = data.message
+  })
+  .catch(error => {
+    console.error("Erro:", error)
+    messageError.textContent = "Erro ao tentar fazer login. Tente novamente."
+  })
+}
+
 const categoryInput = document.getElementById('floatingCategory')
 const listCategories = document.getElementById('listCategories')
 categoryInput.addEventListener('click', ()=>{

@@ -7,7 +7,7 @@ from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, login
 from utils.permissions import IsInstructor, VerifyCoursePurchase
 from courses.models import Course, Module, Class, Student, StudentClass
 from courses.serializers import (
@@ -195,17 +195,18 @@ class LoginApiView(APIView):
         # Retorna erro se as credenciais forem inválidas.
         if user is None:
             return Response(
-                {'detail': 'Credenciais inválidas'}, 
+                {'message': 'Credenciais inválidas'}, 
                 status=status.HTTP_401_UNAUTHORIZED)
         
         # Gera um token de acesso (JWT) para o usuário autenticado.
         refresh = RefreshToken.for_user(user)
         access_token = str(refresh.access_token) # type: ignore
 
-        print(access_token)
-
         # Registra o token na sessão do usuário.
         request.session['access_token'] = access_token
+
+        # Faz o login do usuario
+        login(request, user)
 
         # Retorna mensagem de sucesso no login.
         return Response(

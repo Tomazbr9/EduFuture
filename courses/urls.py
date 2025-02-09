@@ -26,5 +26,6 @@ urlpatterns = [
     
     # urls login render
     path('login_user/', views.login_view, name='login-user'),
+    path('logout_user/', views.logout_view, name='logout-user'),
     path('register_user/', views.register_view, name='register-user')
 ]
