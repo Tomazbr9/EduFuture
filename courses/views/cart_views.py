@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from courses.models import Course
 
-
 def add_to_cart(request, course_id):
 
     course = get_object_or_404(Course, pk=course_id)

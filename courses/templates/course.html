@@ -11,7 +11,11 @@
                 </div>
                 <div class="price-course">
                     <p>R$ {{course.price}}</p>
-                    <button type="button" class="btn-buy" onclick="showModal(event, '{{course.pk}}')">Adicionar ao carrinho</button>
+                    {% if user.is_authenticated %}
+                        <button type="button" class="btn-buy" onclick="showModal(event, '{{course.pk}}')">Adicionar ao carrinho</button>
+                    {% else %}
+                        <a href="{% url "login-user" %}" class="btn-buy">Adicionar ao carrinho</a>
+                    {% endif%}
                 </div>
             </div>
             <div class="container-info-course-grid">

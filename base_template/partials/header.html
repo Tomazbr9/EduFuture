@@ -33,9 +33,9 @@
                 <div class="container-profile-user">
                     <img src="{{request.user.student.image.url}}" class="profile-user" id="profileUser">
                     <ul class="dropdown-profile" id="dropdownUser">
-                        <li><a class="dropdown-item" href="#">Configurações de conta</a></li>
+                        <li><a  href="{% url "profile" user.username %}" class="dropdown-item" href="#">Configurações de conta</a></li>
                         <li><a class="dropdown-item" href="#">Historico de compras</a></li>
-                        <li><a class="dropdown-item" href="#">Sair da conta</a></li>
+                        <li><a href="{% url "logout-user" %}" class="dropdown-item" href="#">Sair da conta</a></li>
                     </ul>
                 </div>
             {% else %}
