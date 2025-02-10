@@ -30,7 +30,14 @@
             </ul>
             <a href="{% url "cart" %}"><i class="bi bi-cart"></i></a>
             {% if user.is_authenticated %}
-                <a href="{% url "logout-user" %}" class="nav-link active">logout</a>
+                <div class="container-profile-user">
+                    <img src="{{request.user.student.image.url}}" class="profile-user" id="profileUser">
+                    <ul class="dropdown-profile" id="dropdownUser">
+                        <li><a class="dropdown-item" href="#">Configurações de conta</a></li>
+                        <li><a class="dropdown-item" href="#">Historico de compras</a></li>
+                        <li><a class="dropdown-item" href="#">Sair da conta</a></li>
+                    </ul>
+                </div>
             {% else %}
                 <a href="{% url "login-user" %}" class="nav-link active">Login</a>
             {% endif %}

@@ -22,10 +22,6 @@ def home(request):
     finance_courses = Course.objects.filter(category=3)
     finance_courses_slice = slice_courses(finance_courses)
 
-    # desired_category = Student.objects.get(user=request.user).category
-    # courses_interest = Course.objects.filter(category=3)
-    # courses_interest_slice = slice_courses(courses_interest)
-
     context = {
         'all_courses': all_courses_slice,
         'technology_courses': technology_courses_slice,

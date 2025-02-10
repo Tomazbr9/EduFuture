@@ -1,5 +1,4 @@
 let currentSlide = 0;
-
 function moveCarousel(carousel_id, direction) {
   const carouselWrapper = document.querySelector(`.carousel-wrapper-${carousel_id}`);
   const totalSlides = document.querySelectorAll(`.carousel-wrapper-${carousel_id} .carousel-slide`).length;
@@ -123,4 +122,3 @@ document.getElementById("floatingDate").addEventListener("input", function (e) {
       document.getElementById('hiddenDate').value = ''
     }
 })
-
