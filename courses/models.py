@@ -95,6 +95,10 @@ class StudentClass(Base):
     cls = models.ForeignKey(Class, on_delete=models.CASCADE)
     completed = models.BooleanField(default=False)
 
+class Cart(Base):
+    user = models.OneToOneField(Student, on_delete=models.CASCADE)
+    items = models.JSONField(default=dict) 
+
 
 
 
