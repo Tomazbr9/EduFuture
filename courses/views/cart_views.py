@@ -26,17 +26,6 @@ def add_to_cart(request, course_id):
     # Atualiza o carrinho na sessão
     request.session['cart'] = cart
 
-    # Obtém ou cria o Student vinculado ao usuário logado
-    student, created = Student.objects.get_or_create(user=request.user)
-
-    # Obtém ou cria o carrinho do estudante
-    cart_obj, created = Cart.objects.get_or_create(user=student)
-
-    # Se items for um JSONField, apenas salvar os itens no banco
-    if hasattr(cart_obj, 'items'):
-        cart_obj.items = cart  # Armazena o carrinho no banco
-        cart_obj.save()
-
     return redirect('cart')
 
 
@@ -49,35 +38,18 @@ def remove_item_cart(request, item_id):
         del cart[str(item_id)]
         request.session['cart'] = cart  # Atualiza a sessão
 
-    # Obtém ou cria o estudante vinculado ao usuário
-    student, _ = Student.objects.get_or_create(user=request.user)
-
-    # Obtém ou cria o carrinho do estudante
-    cart_obj, _ = Cart.objects.get_or_create(user=student)
-
-    # Se `cart_obj.items` for um JSONField, remove a chave de forma segura
-    if isinstance(cart_obj.items, dict) and str(item_id) in cart_obj.items:
-        cart_obj.items.pop(str(item_id))  # Remove o item do JSONField
-        cart_obj.save()  # Salva a alteração no banco de dados
-
-    # Atualiza o carrinho na sessão
-    request.session['cart'] = cart_obj.items if isinstance(cart_obj.items, dict) else {}
-
     return redirect('cart')
 
 @login_required(login_url='login-user')
 def cart_view(request):
     
-    student = get_object_or_404(Student, user=request.user)
-    cart, _ = Cart.objects.get_or_create(user=student)
-
-    items = cart.items if cart.items else {}
+    cart = request.session.get('cart', {})
 
     # obter numero de cursos no carrinho
-    number_course_cart = len(items)
+    number_course_cart = len(cart)
 
     context = {
-        'items': items,
+        'cart': cart,
         'number_course_cart': number_course_cart
     }
 

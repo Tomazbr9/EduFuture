@@ -314,6 +314,8 @@ class UserUpdateSerializer(serializers.ModelSerializer):
         queryset=Category.objects.all(), required=False, allow_null=True
     )
 
+    image = serializers.ImageField(default='profiles/sem_perfil.jpg')
+
     class Meta:
         # Define o modelo associado a este serializer.
         model = User
@@ -324,6 +326,7 @@ class UserUpdateSerializer(serializers.ModelSerializer):
             'first_name',
             'last_name',
             'age',
+            'image',
             'is_instructor',
             'description',
             'category',
@@ -334,6 +337,7 @@ class UserUpdateSerializer(serializers.ModelSerializer):
             'email': {'required': False},
             'first_name': {'required': False},
             'last_name': {'required': False},
+            'image': {'required': False}
         }
 
     def update(self, instance, validated_data):

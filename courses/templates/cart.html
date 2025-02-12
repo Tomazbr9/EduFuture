@@ -5,7 +5,7 @@
     <p class="presentation-sub-text">{% if number_course_cart %}{{number_course_cart}}{% else %}0{% endif %} cursos no carrinho</p>
 
     <div class="container-course-cart">
-        {% for course_id, course in items.items %}
+        {% for course_id, course in cart.items %}
             <div class="content-course-cart">
                 <div class="container-info-course-cart">
                     <div class="container-image-cart">

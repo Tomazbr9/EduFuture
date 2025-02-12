@@ -9,7 +9,7 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
 from utils.permissions import IsInstructor, VerifyCoursePurchase
-from courses.models import Course, Module, Class, Student, StudentClass
+from courses.models import Course, Module, Class, Student, StudentClass, Cart
 from courses.serializers import (
     CourseSerializer, ModuleSerializer, ClassSerializer, 
     UserRegistrationSerializer, StudentSerializer, 
@@ -154,7 +154,7 @@ class UpdateUserApiView(APIView):
     View para atualizar usuários existentes
     """
 
-    def patch(self, request, pk: int) -> Response:
+    def post(self, request, pk: int) -> Response:
         # Recupera o usuário pelo ID (pk). Retorna 404 se o usuário não for encontrado.
         user = get_object_or_404(User, pk=pk)
         
@@ -207,6 +207,11 @@ class LoginApiView(APIView):
 
         # Faz o login do usuario
         login(request, user)
+
+        user = get_object_or_404(Student, user=request.user)
+        cart, _ = Cart.objects.get_or_create(user=user)
+
+        request.session['cart'] = cart.items
 
         # Retorna mensagem de sucesso no login.
         return Response(

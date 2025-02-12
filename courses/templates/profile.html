@@ -1,17 +1,29 @@
 {% extends "base.html" %}
 {% block main_content %}
 <div class="container mt-5">
-    <div class="container-profile">
-        <img src="{{user.student.image.url}}" class="card-img-top rounded-circle mx-auto mt-3" style="width: 100px; height: 100px;" alt="Foto do Usuário">
-        <div class="mb-3">
-            <label class="form-label field-label" for="firstName">Nome</label>
-            <input class="input-fields-profile form-control" type="text" value="{{user.first_name}}" id="firstName">
-            <label class="form-label field-label" for="firstName">Sobrenome</label>
-            <input class="input-fields-profile form-control" type="text" value="{{user.last_name}}" id="firstName">
-            <label class="form-label field-label" for="firstName">Email</label>
-            <input class="input-fields-profile form-control" type="text" value="{{user.email}}" id="firstName">
+    <form method="post" action="{% url "update-user" user.pk %}" enctype="multipart/form-data" class="container-profile">
+        <div class="container-image-profile">
+            <img src="{{user.student.image.url}}" id="imageUserPreview" class="card-img-top rounded-circle mx-auto mt-3" style="width: 100px; height: 100px;" alt="Foto do Usuário">
+            <label id="labelImageProfile" for="imageUser"><i class="bi update-image bi-pen"></i></label>
+            <input class="input-image-profile" type="file" accept="image/*" id="imageUser" name="image">
         </div>
-        <a href="#" class="btn btn-primary">Editar Perfil</a>
-    </div>
+        <div class="mb-3">
+            <label class="form-label field-label" for="userName">Nome de Usuario</label>
+            <input class="input-fields-profile form-control" type="text" value="{{user.username}}" id="userName" name="username">
+            <label class="form-label field-label" for="firstNameUser">Nome</label>
+            <input class="input-fields-profile form-control" type="text" value="{{user.first_name}}" id="firstNameUser" name="first_name">
+            <label class="form-label field-label" for="lastNameUser">Sobrenome</label>
+            <input class="input-fields-profile form-control" type="text" value="{{user.last_name}}" id="lastNameUser" name="last_name">
+            <label class="form-label field-label" for="emailUser">Email</label>
+            <input class="input-fields-profile form-control" type="text" value="{{user.email}}" id="emailUser" name="email">
+
+            {% if user.student.is_instructor %}
+                <label class="form-label field-label" for="descriptionUser">Descrição</label>
+                <input class="input-fields-profile form-control" type="textarea" value="{{user.student.description}}" id="descriptionUser" name="description">
+            {% endif %}
+
+        </div>
+        <button type="submit" href="{% url "update-user" user.student.pk %}" class="btn btn-primary btn-update-user">Editar Perfil</button>
+    </form>
 </div>
 {% endblock main_content %}

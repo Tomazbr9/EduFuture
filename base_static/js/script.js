@@ -122,3 +122,17 @@ document.getElementById("floatingDate").addEventListener("input", function (e) {
       document.getElementById('hiddenDate').value = ''
     }
 })
+
+
+document.getElementById("imageUser").addEventListener('change', (event) => {
+  const file = event.target.files[0]
+  console.log('oi')
+  if (file) {
+      const reader = new FileReader()
+      reader.onload = function (e) {
+          const img = document.getElementById('imageUserPreview')
+          img.src = e.target.result
+      }
+      reader.readAsDataURL(file) 
+  }
+})
