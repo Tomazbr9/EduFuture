@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.db.models import Sum
 from courses.models import Course, Cart, Student
 
 def add_to_cart(request, course_id):
@@ -45,11 +46,17 @@ def cart_view(request):
     
     cart = request.session.get('cart', {})
 
+    # obter total do carrinho
+    total = 0
+    for value in cart.values():
+        total += value['price']
+
     # obter numero de cursos no carrinho
     number_course_cart = len(cart)
 
     context = {
         'cart': cart,
+        'total': total,
         'number_course_cart': number_course_cart
     }
 

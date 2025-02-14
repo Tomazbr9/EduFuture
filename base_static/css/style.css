@@ -474,6 +474,22 @@ body {
   font-size: 20px;
   margin: 0;
 }
+
+.container-buy-courses {
+  display: flex;
+  margin-top: 30px;
+  justify-content: space-between;
+}
+
+.container-buy-courses p {
+  margin: 0;
+}
+
+.total-cart-text {
+  font-size: 20px;
+  font-weight: 500;
+  color: #555;
+}
  
 /* login */
 

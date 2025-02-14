@@ -67,6 +67,11 @@ function loginUser(event) {
   })
   .then(data => {
     messageError.textContent = data.message
+
+    if (data.access_token){
+      localStorage.setItem('access_token', data.access_token)
+      localStorage.setItem('refresh_token', data.refresh_token)
+    }
   })
   .catch(error => {
     console.error("Erro:", error)
@@ -76,9 +81,11 @@ function loginUser(event) {
 
 const categoryInput = document.getElementById('floatingCategory')
 const listCategories = document.getElementById('listCategories')
-categoryInput.addEventListener('click', ()=>{
-    listCategories.style.display = 'block'
-})
+if(categoryInput && listCategories){
+  categoryInput.addEventListener('click', ()=>{
+      listCategories.style.display = 'block'
+  })
+}
 
 function assignCategory(element, IdCategory){
     let categoryInput = document.getElementById('floatingCategory')
@@ -89,44 +96,50 @@ function assignCategory(element, IdCategory){
 }
 
 
-document.getElementById("floatingDate").addEventListener("input", function (e) {
-    let value = e.target.value.replace(/\D/g, "") // Remove tudo que não for número
-    let formattedValue = ""
+document.addEventListener("DOMContentLoaded", () => {
+  const floatingDate = document.getElementById("floatingDate")
+  const hiddenDate = document.getElementById("hiddenDate")
 
-    if (value.length > 2) {
-        formattedValue += value.substring(0, 2) + "/";
-    } else {
-        formattedValue += value
-    }
-    if (value.length > 4) {
-        formattedValue += value.substring(2, 4) + "/"
-    } else if (value.length > 2) {
-        formattedValue += value.substring(2);
-    }
-    if (value.length > 8) {
-        formattedValue += value.substring(4, 8)
-    } else if (value.length > 4) {
-        formattedValue += value.substring(4)
-    }
+  if (floatingDate && hiddenDate) { // Verifica se os elementos existem
+      floatingDate.addEventListener("input", function (e) {
+          let value = e.target.value.replace(/\D/g, "") // Remove tudo que não for número
+          let formattedValue = ""
 
-    e.target.value = formattedValue
+          if (value.length > 2) {
+              formattedValue += value.substring(0, 2) + "/"
+          } else {
+              formattedValue += value
+          }
+          if (value.length > 4) {
+              formattedValue += value.substring(2, 4) + "/"
+          } else if (value.length > 2) {
+              formattedValue += value.substring(2)
+          }
+          if (value.length > 8) {
+              formattedValue += value.substring(4, 8)
+          } else if (value.length > 4) {
+              formattedValue += value.substring(4)
+          }
 
-    if(value.length === 8){
-      let day = value.substring(0, 2)
-      let month = value.substring(2, 4)
-      let year = value.substring(4)
-    
-      document.getElementById('hiddenDate').value = `${year}-${month}-${day}`
+          e.target.value = formattedValue
 
-    } else {
-      document.getElementById('hiddenDate').value = ''
-    }
+          if (value.length === 8) {
+              let day = value.substring(0, 2)
+              let month = value.substring(2, 4)
+              let year = value.substring(4)
+
+              hiddenDate.value = `${year}-${month}-${day}`
+          } else {
+              hiddenDate.value = ""
+          }
+      })
+  }
 })
+
 
 
 document.getElementById("imageUser").addEventListener('change', (event) => {
   const file = event.target.files[0]
-  console.log('oi')
   if (file) {
       const reader = new FileReader()
       reader.onload = function (e) {
@@ -136,3 +149,33 @@ document.getElementById("imageUser").addEventListener('change', (event) => {
       reader.readAsDataURL(file) 
   }
 })
+
+
+function buyCourses(){
+
+  let courses = []
+
+  document.querySelectorAll('.content-course-cart').forEach((item)=> {
+    let courseId = item.getAttribute('course-id')
+    if(courseId){
+      courses.push(parseInt(courseId))
+    }
+  })
+
+  const token = localStorage.getItem('access_token')
+  console.log(token)
+  fetch('/courses/buy/', {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`  // Enviar token do usuário autenticado
+    },
+    body: JSON.stringify({ courses: courses })
+  })
+  .then(response => response.json())
+  .then(data => {
+      alert(data.message);
+      window.location.reload();  // Atualiza a página após a compra
+  })
+  .catch(error => console.error("Erro ao comprar cursos:", error));
+}

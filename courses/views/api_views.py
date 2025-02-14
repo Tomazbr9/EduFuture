@@ -202,6 +202,8 @@ class LoginApiView(APIView):
         refresh = RefreshToken.for_user(user)
         access_token = str(refresh.access_token) # type: ignore
 
+        print(access_token)
+
         # Registra o token na sessão do usuário.
         request.session['access_token'] = access_token
 
@@ -215,7 +217,11 @@ class LoginApiView(APIView):
 
         # Retorna mensagem de sucesso no login.
         return Response(
-            {'message': 'Login bem-sucedido!'}
+            {
+                'message': 'Login bem-sucedido!',
+                'access_token': access_token,
+                'refresh_token': str(refresh) 
+            }
         )
 
         
