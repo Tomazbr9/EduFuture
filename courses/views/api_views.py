@@ -226,23 +226,15 @@ class LoginApiView(APIView):
 
         
 class BuyApiView(APIView):
-    """
-    API View utilizada para vincular aluno e curso.
-    """
-
-    # Define que a autenticação é necessária para acessar a API.
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        # Cria uma instância do serializer com os dados da requisição.
-        serializer = StudentCourseSerializer(
-            data=request.data, context={'request': request})
+        serializer = StudentCourseSerializer(data=request.data, context={'request': request})
 
-        # Verifica se os dados enviados são válidos.
         if serializer.is_valid():
-            # Salva a associação do aluno com o curso.
+            request.session['cart'] = {}  # Limpa o carrinho
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        
-        # Retorna os erros de validação, se houver.
+            return Response({"message": "Cursos comprados com sucesso!"}, status=status.HTTP_201_CREATED)
+
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+

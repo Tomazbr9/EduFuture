@@ -136,72 +136,55 @@ class StudentClassSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class StudentCourseSerializer(serializers.ModelSerializer):
-    
+    courses = serializers.ListField(
+        child=serializers.PrimaryKeyRelatedField(queryset=Course.objects.all()),
+        write_only=True
+    )
+
     class Meta:
-        # Define o modelo associado ao serializer.
         model = StudentCourse
-        
-        # Especifica os campos manipulados pelo serializer.
-        fields = [
-            'student',
-            'course',
-        ]
-        
-        # Define o campo 'student' como somente leitura.
+        fields = ['student', 'courses']
         read_only_fields = ['student']
-    
+
     def get_authenticated_student(self):
-        """
-        Recupera o estudante autenticado com base no usuário da requisição.
-        """
-        user = self.context['request'].user  # Obtém o usuário autenticado da requisição.
-        
+        user = self.context['request'].user
         try:
-            # Recupera o objeto Student associado ao usuário autenticado.
             return Student.objects.get(user=user)
         except Student.DoesNotExist:
-            # Lança um erro caso o usuário autenticado não esteja vinculado a um estudante.
             raise serializers.ValidationError('Aluno não existe!')
-    
+
     def validate(self, data):
-        """
-        Valida se o estudante já comprou o curso.
-        """
-        course = data['course']  # Recupera o curso enviado nos dados.
-        student = self.get_authenticated_student()  # Recupera o estudante autenticado.
+        student = self.get_authenticated_student()
+        courses = data['courses']
 
-        # Verifica se o curso já foi comprado pelo estudante.
-        if StudentCourse.objects.filter(student=student, course=course).exists():
-            raise serializers.ValidationError("Este curso já foi comprado!")
+        # Verificar se o aluno já comprou algum dos cursos
+        already_purchased = StudentCourse.objects.filter(student=student, course__in=courses).values_list('course_id', flat=True)
         
-        return data  # Retorna os dados validados.
-    
+        if already_purchased:
+            purchased_names = Course.objects.filter(id__in=already_purchased).values_list('name', flat=True)
+            raise serializers.ValidationError(f"Você já comprou os cursos: {', '.join(purchased_names)}")
+
+        return data
+
     def create(self, validated_data):
-        """
-        Cria a relação entre estudante e curso, incluindo os módulos e aulas.
-        """
-        student = self.get_authenticated_student()  # Recupera o estudante autenticado.
-        course = validated_data.get('course')  # Obtém o curso dos dados validados.
-        
-        with transaction.atomic():
-            # Cria ou recupera a relação entre o estudante e cada módulo do curso.
-            for module in course.modules.all():  # type: ignore
-                StudentModule.objects.get_or_create(
-                    student=student, module=module
-                )
-            
-            # Cria ou recupera a relação entre o estudante e cada aula de cada módulo.
-            for module in course.modules.all():  # type: ignore
-                for cls in module.classes.all():
-                    StudentClass.objects.get_or_create(
-                        student=student, cls=cls
-                    )
+        student = self.get_authenticated_student()
+        courses = validated_data.get('courses')
+        created_courses = []
 
-            # Cria ou recupera a relação entre o estudante e o curso.
-            student_course, _ = StudentCourse.objects.get_or_create(
-                student=student, course=course
-            )
-            return student_course  # Retorna o objeto criado.
+        with transaction.atomic():
+            for course in courses:
+                # Criar ou recuperar os módulos e aulas para cada curso
+                for module in course.modules.all():
+                    StudentModule.objects.get_or_create(student=student, module=module)
+
+                for module in course.modules.all():
+                    for cls in module.classes.all():
+                        StudentClass.objects.get_or_create(student=student, cls=cls)
+
+                student_course, _ = StudentCourse.objects.get_or_create(student=student, course=course)
+                created_courses.append(student_course)
+
+        return created_courses
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
     # Define se o usuário será instrutor, com padrão como falso.

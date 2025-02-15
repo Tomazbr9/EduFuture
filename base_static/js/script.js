@@ -150,32 +150,36 @@ document.getElementById("imageUser").addEventListener('change', (event) => {
   }
 })
 
-
-function buyCourses(){
-
+function buyCourses() {
   let courses = []
 
-  document.querySelectorAll('.content-course-cart').forEach((item)=> {
-    let courseId = item.getAttribute('course-id')
-    if(courseId){
+  document.querySelectorAll('.content-course-cart').forEach(item => {
+    let courseId = item.getAttribute('course-id');
+    if (courseId) {
       courses.push(parseInt(courseId))
     }
   })
 
+  if (courses.length === 0) {
+    alert("Seu carrinho está vazio!")
+    return
+  }
+
   const token = localStorage.getItem('access_token')
-  console.log(token)
+
   fetch('/courses/buy/', {
     method: "POST",
     headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`  // Enviar token do usuário autenticado
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`
     },
-    body: JSON.stringify({ courses: courses })
+    body: JSON.stringify({ courses: courses }) 
   })
   .then(response => response.json())
   .then(data => {
-      alert(data.message);
-      window.location.reload();  // Atualiza a página após a compra
+    window.location.reload()
   })
-  .catch(error => console.error("Erro ao comprar cursos:", error));
+  .catch(error => {
+    console.error("Erro ao comprar cursos:", error)
+  })
 }
