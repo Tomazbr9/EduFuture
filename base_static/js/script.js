@@ -1,21 +1,85 @@
-let currentSlide = 0;
+function refreshToken() {
+  const refreshToken = localStorage.getItem('refresh_token');
+  console.log(refreshToken)
+  return fetch('/courses/refresh_token/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ refresh_token: refreshToken })
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Erro ao renovar o token.');
+    }
+    return response.json();
+  })
+  .then(data => {
+    localStorage.setItem('access_token', data.access_token);
+    localStorage.setItem('refresh_token', data.refresh_token);
+    return data.access_token;
+  })
+  .catch(error => {
+    console.error("Erro ao renovar o token:", error);
+    // Redireciona para a página de login se o refresh_token também expirar
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('refresh_token');
+    window.location.href = '/courses/login_user';
+    throw error;
+  });
+}
+
+async function fetchWithTokenRefresh(url, options = {}) {
+  let accessToken = localStorage.getItem('access_token');
+
+  // Tenta fazer a requisição com o token atual
+  let response = await fetch(url, {
+    ...options,
+    headers: {
+      ...options.headers,
+      'Authorization': `Bearer ${accessToken}`
+    }
+  });
+
+  // Se o token expirou (status 401), tenta renovar o token
+  if (response.status === 401) {
+    try {
+      const newAccessToken = await refreshToken();
+      // Repete a requisição com o novo token
+      response = await fetch(url, {
+        ...options,
+        headers: {
+          ...options.headers,
+          'Authorization': `Bearer ${newAccessToken}`
+        }
+      });
+    } catch (error) {
+      console.error("Erro ao renovar o token:", error);
+      throw error;
+    }
+  }
+
+  return response;
+}
+
+let currentSlide = 0
 function moveCarousel(carousel_id, direction) {
   const carouselWrapper = document.querySelector(`.carousel-wrapper-${carousel_id}`);
   const totalSlides = document.querySelectorAll(`.carousel-wrapper-${carousel_id} .carousel-slide`).length;
   
   // Atualiza o índice do slide
-  currentSlide += direction;
+  currentSlide += direction
 
   // Verifica os limites
   if (currentSlide < 0) {
     currentSlide = totalSlides - 1;
   } else if (currentSlide >= totalSlides) {
-    currentSlide = 0;
+    currentSlide = 0
   }
 
   // Move o carrossel
-  const slideWidth = carouselWrapper.offsetWidth;
-  carouselWrapper.style.transform = `translateX(-${currentSlide * slideWidth}px)`;
+  const slideWidth = carouselWrapper.offsetWidth
+  carouselWrapper.style.transform = `translateX(-${currentSlide * slideWidth}px)`
 }
 
 
@@ -60,7 +124,7 @@ function loginUser(event) {
   })
   .then(response => {
     if(response.ok){
-      window.location.href = '/courses/home/'
+      // window.location.href = '/courses/home/'
     }
 
     return response.json()
@@ -136,8 +200,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 })
 
-
-
 document.getElementById("imageUser").addEventListener('change', (event) => {
   const file = event.target.files[0]
   if (file) {
@@ -164,22 +226,21 @@ function buyCourses() {
     alert("Seu carrinho está vazio!")
     return
   }
-
-  const token = localStorage.getItem('access_token')
-
-  fetch('/courses/buy/', {
-    method: "POST",
+  
+  fetchWithTokenRefresh('/courses/buy/', {
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${token}`
+      'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ courses: courses }) 
+    body: JSON.stringify({ courses: courses })
   })
   .then(response => response.json())
   .then(data => {
+    alert("Compra realizada com sucesso!");
     window.location.reload()
   })
   .catch(error => {
-    console.error("Erro ao comprar cursos:", error)
-  })
+    console.error("Erro ao comprar cursos:", error);
+    alert("Ocorreu um erro ao processar sua compra. Por favor, tente novamente.");
+  });
 }

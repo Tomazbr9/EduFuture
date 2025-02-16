@@ -42,10 +42,30 @@ def course(request, course_id):
     # Quantidade de alunos matriculados
     number_of_students = StudentCourse.objects.filter(course=course).count()
 
+    # Verificar se o usuario comprou o curso
+    user = Student.objects.get(user=request.user)
+    course_purchased = StudentCourse.objects.filter(
+        course=course, student=user).exists()
+
     context = {
+        'course_purchased': course_purchased,
         'course': course,
         'learning_list': learning_list,
         'number_of_students': number_of_students
     }
 
     return render(request, 'course.html', context)
+
+def courses_from_user(request):
+    
+    # obter cursos comprados pelo usuario
+    user = Student.objects.get(user=request.user)
+    courses_from_user = StudentCourse.objects.filter(student=user)
+
+    print(courses_from_user)
+
+    context = {
+        'courses_from_user': courses_from_user
+    }
+
+    return render(request, 'courses_from_user.html', context)

@@ -124,6 +124,10 @@ body {
     background-color: #fff;
   }
 
+.card-course {
+  width: 200px;
+}
+
 .card-direction {
     text-decoration: none;
 }

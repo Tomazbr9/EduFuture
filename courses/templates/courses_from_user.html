@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block main_content %}
+<div class="container mt-4">
+    <div class="row">
+        {% for course in courses_from_user %}
+            <div class="col-md-4 mb-4">
+                    <a href="{% url "course" course.course.pk %}" class="card-direction">
+                    <div class="card card-course">
+                        <img src="{{ course.course.image.url }}" class="card-img-top" alt="{{ course.course.name }}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ course.course.name }}</h5>
+                            <p class="card-text">{{ course.course.instructor.user.first_name }}</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock main_content %}
+

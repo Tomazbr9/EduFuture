@@ -15,9 +15,11 @@ urlpatterns = [
     path('update/<int:pk>/', views.UpdateUserApiView.as_view(), name='update-user'),
     path('login/', views.LoginApiView.as_view(), name='login'),
     path('buy/', views.BuyApiView.as_view(), name='buy'),
+    path('refresh_token/', views.RefreshTokenView.as_view(), name='refresh_token'),
 
     path('home/', views.home, name='home'),
     path('course/<int:course_id>/', views.course, name='course'),
+    path('my_courses/', views.courses_from_user, name='my-courses'),
 
     # urls cart
     path('cart/', views.cart_view, name='cart'),
@@ -30,6 +32,5 @@ urlpatterns = [
     path('register_user/', views.register_view, name='register-user'),
 
     # urls profile
-     path('profile/<str:name_user>/', views.profile_view, name='profile'),
-
+    path('profile/<str:name_user>/', views.profile_view, name='profile'),
 ]

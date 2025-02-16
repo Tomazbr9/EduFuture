@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 {% block main_content %}
+{% if not course_purchased %}
 <div class="container-course-wrapper">
     <div class="course-wrapper">
         <div class="content-center container-course-info">
@@ -109,4 +110,7 @@
         </div>
     </div>
 </div>
+{% else %}
+    {% include "course_purchased.html" %}
+{% endif %}
 {% endblock main_content %}
