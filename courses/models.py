@@ -39,7 +39,7 @@ class Course(Base):
     description = models.TextField(max_length=255)
     objective = models.TextField(default='')
     price = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal('0.0'))
-    image = models.ImageField(upload_to='courses', blank=True, null=True)
+    image = models.ImageField(upload_to='courses/', blank=True, null=True)
     instructor = models.ForeignKey(
         Student, related_name='courses', on_delete=models.SET_NULL, null=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
@@ -66,8 +66,9 @@ class Module(Base):
 # Modelo de Aula
 class Class(models.Model):
     title = models.CharField(max_length=255)
-    materials = models.FileField(upload_to='materials', blank=True, null=True)
+    materials = models.FileField(upload_to='materials/', blank=True, null=True)
     module = models.ForeignKey(Module, related_name='classes', on_delete=models.CASCADE)
+    video = models.FileField(upload_to='videos/', blank=True, null=True)
 
     def __str__(self) -> str:
         return self.title

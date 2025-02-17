@@ -1,8 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from utils.other_functions import slice_courses
-from courses.models import Course, Student, StudentCourse
-from decimal import Decimal
-
+from courses.models import Course, Student, StudentCourse, Class, Module
+from collections import defaultdict
 
 def home(request):
 
@@ -35,6 +34,14 @@ def home(request):
 
 def course(request, course_id):
     course = get_object_or_404(Course, pk=course_id)
+    course_purchased = False
+    try:
+        user = Student.objects.get(user=request.user)
+        # Verificar se o usuario comprou o curso
+        course_purchased = StudentCourse.objects.filter(
+        course=course, student=user).exists()
+    except Exception:
+        ...
     
     # Lista de Objetivos de aprendizado
     learning_list = course.objective.split('\n')
@@ -42,16 +49,20 @@ def course(request, course_id):
     # Quantidade de alunos matriculados
     number_of_students = StudentCourse.objects.filter(course=course).count()
 
-    # Verificar se o usuario comprou o curso
-    user = Student.objects.get(user=request.user)
-    course_purchased = StudentCourse.objects.filter(
-        course=course, student=user).exists()
+    
+    # Obtem os modulos e aulas do curso
+    modules = course.modules.prefetch_related('classes') # type: ignore
+    modules_dict = {}
+
+    for module in modules:
+        modules_dict[module.title] = list(module.classes.values('id', 'title'))
 
     context = {
         'course_purchased': course_purchased,
         'course': course,
         'learning_list': learning_list,
-        'number_of_students': number_of_students
+        'number_of_students': number_of_students,
+        'modules_dict': modules_dict
     }
 
     return render(request, 'course.html', context)
@@ -61,8 +72,6 @@ def courses_from_user(request):
     # obter cursos comprados pelo usuario
     user = Student.objects.get(user=request.user)
     courses_from_user = StudentCourse.objects.filter(student=user)
-
-    print(courses_from_user)
 
     context = {
         'courses_from_user': courses_from_user

@@ -420,6 +420,25 @@ body {
   text-decoration: none;
 }
 
+.container-course-purchased {
+  position: fixed;
+  top: 80px;  /* Distância do topo (ajuste conforme a altura do seu header) */
+  right: 0;
+  bottom: 0;  /* Faz com que a div ocupe o restante da altura */
+  width: 300px;  /* Ajuste a largura conforme necessário */
+  overflow-y: auto;  /* Permite rolar o conteúdo se necessário */
+  background-color: #fff;  /* Escolha a cor de fundo que preferir */
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);  /* Adiciona sombra para dar destaque */
+}
+
+.content-course-purchased {
+  position: relative;
+}
+
+.content-course-purchased h2 {
+  font-size: 20px;
+  margin-bottom: 20px;
+}
 
 /* Cart */
 

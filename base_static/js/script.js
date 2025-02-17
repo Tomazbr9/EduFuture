@@ -1,5 +1,5 @@
 function refreshToken() {
-  const refreshToken = localStorage.getItem('refresh_token');
+  const refreshToken = localStorage.getItem('refresh_token')
   console.log(refreshToken)
   return fetch('/courses/refresh_token/', {
     method: 'POST',
@@ -10,27 +10,27 @@ function refreshToken() {
   })
   .then(response => {
     if (!response.ok) {
-      throw new Error('Erro ao renovar o token.');
+      throw new Error('Erro ao renovar o token.')
     }
-    return response.json();
+    return response.json()
   })
   .then(data => {
-    localStorage.setItem('access_token', data.access_token);
-    localStorage.setItem('refresh_token', data.refresh_token);
-    return data.access_token;
+    localStorage.setItem('access_token', data.access_token)
+    localStorage.setItem('refresh_token', data.refresh_token)
+    return data.access_token
   })
   .catch(error => {
-    console.error("Erro ao renovar o token:", error);
+    console.error("Erro ao renovar o token:", error)
     // Redireciona para a página de login se o refresh_token também expirar
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('refresh_token');
-    window.location.href = '/courses/login_user';
-    throw error;
+    localStorage.removeItem('access_token')
+    localStorage.removeItem('refresh_token')
+    window.location.href = '/courses/login_user'
+    throw error
   });
 }
 
 async function fetchWithTokenRefresh(url, options = {}) {
-  let accessToken = localStorage.getItem('access_token');
+  let accessToken = localStorage.getItem('access_token')
 
   // Tenta fazer a requisição com o token atual
   let response = await fetch(url, {
@@ -39,12 +39,12 @@ async function fetchWithTokenRefresh(url, options = {}) {
       ...options.headers,
       'Authorization': `Bearer ${accessToken}`
     }
-  });
+  })
 
   // Se o token expirou (status 401), tenta renovar o token
   if (response.status === 401) {
     try {
-      const newAccessToken = await refreshToken();
+      const newAccessToken = await refreshToken()
       // Repete a requisição com o novo token
       response = await fetch(url, {
         ...options,
@@ -54,12 +54,12 @@ async function fetchWithTokenRefresh(url, options = {}) {
         }
       });
     } catch (error) {
-      console.error("Erro ao renovar o token:", error);
-      throw error;
+      console.error("Erro ao renovar o token:", error)
+      throw error
     }
   }
 
-  return response;
+  return response
 }
 
 let currentSlide = 0
@@ -236,11 +236,10 @@ function buyCourses() {
   })
   .then(response => response.json())
   .then(data => {
-    alert("Compra realizada com sucesso!");
     window.location.reload()
   })
   .catch(error => {
-    console.error("Erro ao comprar cursos:", error);
+    console.error("Erro ao comprar cursos:", error)
     alert("Ocorreu um erro ao processar sua compra. Por favor, tente novamente.");
-  });
+  })
 }
