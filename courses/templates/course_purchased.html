@@ -1,41 +1,38 @@
+{% load static %}
 <div class="container-course-purchased">
     <div>
-        <div>
-            <video controls>
-                <source src="">
-            </video>
+        <video class="video-lesson" id="videoLesson" controls>
+            <source id="urlVideo" src="">
+        </video>
+    </div>
+    <div class="content-course-purchased">
+        <div class="content-course">
+            <h2>Conteúdo do Curso</h2>
+            {% if modules_dict %}
+                {% for module_title, classes in modules_dict.items %}
+                    <div class="module-content">
+                        <div class="module">
+                            <i onclick="displayClasses('{{module_title}}')" id="arrow-{{module_title}}" class="bi bi-chevron-down"></i>
+                            <p>{{module_title}}</p>
+                        </div>
+                    </div>
+
+                    <div id="classes-{{module_title}}" class="content-class">
+                        {% if classes %}
+                            {% for classe in classes %}
+                                <a style="cursor: pointer" onclick="displayClassVideo('{% get_media_prefix %}{{ classe.video }}', this)" class="class-item">{{ classe.title }}</a>
+                            {% empty %}
+                                <p><b>Não existe aulas nesse módulo</b></p>
+                            {% endfor %}
+                        {% else %}
+                            <p><b>Não existe aulas nesse módulo</b></p>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p><b>Não existe Conteúdo</b></p>
+            {% endif %}
         </div>
-        <div class="container-course-purchased">
-            <div class="content-course-purchased">
-                <div class="content-course">
-                    <h2>Conteúdo do Curso</h2>
-                    {% if modules_dict %}
-                        {% for module_title, classes in modules_dict.items %}
-                            <div class="module-content">
-                                <div class="module">
-                                    <i onclick="displayClasses('{{module_title}}')" id="arrow-{{module_title}}" class="bi bi-chevron-down"></i>
-                                    <p>{{module_title}}</p>
-                                </div>
-                            </div>
-        
-                            <div id="classes-{{module_title}}" class="content-class">
-                                {% if classes %}
-                                    {% for classe in classes %}
-                                        <div class="class-item">{{ classe.title }}</div>
-                                    {% empty %}
-                                        <p><b>Não existe aulas nesse módulo</b></p>
-                                    {% endfor %}
-                                {% else %}
-                                    <p><b>Não existe aulas nesse módulo</b></p>
-                                {% endif %}
-                            </div>
-                        {% endfor %}
-                    {% else %}
-                        <p><b>Não existe Conteúdo</b></p>
-                    {% endif %}
-                </div>
-            </div>
-        </div>                
     </div>
 </div>
 

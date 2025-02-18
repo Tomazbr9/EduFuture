@@ -200,17 +200,20 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 })
 
-document.getElementById("imageUser").addEventListener('change', (event) => {
-  const file = event.target.files[0]
-  if (file) {
-      const reader = new FileReader()
-      reader.onload = function (e) {
-          const img = document.getElementById('imageUserPreview')
-          img.src = e.target.result
-      }
-      reader.readAsDataURL(file) 
-  }
-})
+const imageUser = document.getElementById('imageUser')
+if(imageUser){
+  imageUser.addEventListener('change', (event) => {
+    const file = event.target.files[0]
+    if (file) {
+        const reader = new FileReader()
+        reader.onload = function (e) {
+            const img = document.getElementById('imageUserPreview')
+            img.src = e.target.result
+        }
+        reader.readAsDataURL(file) 
+    }
+  })
+}
 
 function buyCourses() {
   let courses = []
@@ -243,3 +246,40 @@ function buyCourses() {
     alert("Ocorreu um erro ao processar sua compra. Por favor, tente novamente.");
   })
 }
+
+function displayClassVideo(video, element){
+  const sourceElement = document.getElementById('urlVideo')
+  const videoElement = document.getElementById('videoLesson')
+  sourceElement.src = video
+  videoElement.load()
+  videoElement.play()
+
+  localStorage.setItem('lastVideo', video)
+  localStorage.setItem('activateClass', element.innerText.trim())
+
+  document.querySelectorAll('class-item').forEach(item => {
+    item.classList.remove('active-class')
+  })
+
+  element.classList.add('active-class')
+  
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  let lastVideo = localStorage.getItem('lastVideo')
+  let activeClass = localStorage.getItem('activeClass')
+
+  if (lastVideo) {
+      document.getElementById('urlVideo').src = lastVideo
+      document.querySelector('.video-lesson').load()
+  }
+
+  // Verifica se activeClass não é nulo antes de tentar selecionar
+  if (activeClass) {
+      document.querySelectorAll('.class-item').forEach(item => {
+          if (item.innerText.trim() === activeClass) {
+              item.classList.add('active-class')
+          }
+      })
+  }
+})

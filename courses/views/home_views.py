@@ -55,7 +55,7 @@ def course(request, course_id):
     modules_dict = {}
 
     for module in modules:
-        modules_dict[module.title] = list(module.classes.values('id', 'title'))
+        modules_dict[module.title] = list(module.classes.values('id', 'title', 'video'))
 
     context = {
         'course_purchased': course_purchased,

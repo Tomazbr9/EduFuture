@@ -388,6 +388,12 @@ body {
 
 .class-item {
   font-weight: 500;
+  text-decoration: none !important;
+  color: var(--terciary-color);
+}
+
+.active-class {
+    background-color: var(--primary-color) !important; 
 }
 
 .container-name-price {
@@ -421,23 +427,32 @@ body {
 }
 
 .container-course-purchased {
-  position: fixed;
-  top: 80px;  /* Distância do topo (ajuste conforme a altura do seu header) */
-  right: 0;
-  bottom: 0;  /* Faz com que a div ocupe o restante da altura */
-  width: 300px;  /* Ajuste a largura conforme necessário */
-  overflow-y: auto;  /* Permite rolar o conteúdo se necessário */
-  background-color: #fff;  /* Escolha a cor de fundo que preferir */
-  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);  /* Adiciona sombra para dar destaque */
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 20px;
 }
 
 .content-course-purchased {
   position: relative;
+  right: 0;
+  top: 0px;  
+  width: 500px;  
+  overflow-y: auto;  
+  background-color: #fff; 
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .content-course-purchased h2 {
   font-size: 20px;
   margin-bottom: 20px;
+}
+
+.video-lesson {
+  width: 1000px;
+  height: 410px;
+  object-fit: contain;
+  background-color: #000000;
 }
 
 /* Cart */
