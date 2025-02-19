@@ -20,7 +20,7 @@
                     <div id="classes-{{module_title}}" class="content-class">
                         {% if classes %}
                             {% for classe in classes %}
-                                <a style="cursor: pointer" onclick="displayClassVideo('{% get_media_prefix %}{{ classe.video }}', this)" class="class-item">{{ classe.title }}</a>
+                                <p style="cursor: pointer; margin: 0;" onclick="displayClassVideo('{% get_media_prefix %}{{ classe.video }}', this)" class="class-item" dataLessonId="lesson-{{classe.id}}">{{ classe.title }}</p>
                             {% empty %}
                                 <p><b>Não existe aulas nesse módulo</b></p>
                             {% endfor %}

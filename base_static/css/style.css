@@ -388,12 +388,15 @@ body {
 
 .class-item {
   font-weight: 500;
-  text-decoration: none !important;
+  padding: 10px;
+  border: 0.5px solid rgb(0, 0, 0, 0.5);
+  font-size: 20px;
+  background-color: rgb(0, 0, 0, 0.2);
   color: var(--terciary-color);
 }
 
 .active-class {
-    background-color: var(--primary-color) !important; 
+  background-color: var(--primary-color) !important; 
 }
 
 .container-name-price {

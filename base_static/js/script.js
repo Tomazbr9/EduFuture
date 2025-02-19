@@ -248,16 +248,19 @@ function buyCourses() {
 }
 
 function displayClassVideo(video, element){
-  const sourceElement = document.getElementById('urlVideo')
-  const videoElement = document.getElementById('videoLesson')
+  let sourceElement = document.getElementById('urlVideo')
+  let videoElement = document.getElementById('videoLesson')
+  let itemId = element.getAttribute('dataLessonId')
+
   sourceElement.src = video
   videoElement.load()
   videoElement.play()
 
-  localStorage.setItem('lastVideo', video)
-  localStorage.setItem('activateClass', element.innerText.trim())
+  localStorage.setItem(`lastVideo-${itemId}`, video)
+  localStorage.setItem(`lesson-${itemId}`, element.innerText.trim())
+  localStorage.setItem('lastClass', itemId)
 
-  document.querySelectorAll('class-item').forEach(item => {
+  document.querySelectorAll('.class-item').forEach(item => {
     item.classList.remove('active-class')
   })
 
@@ -266,20 +269,23 @@ function displayClassVideo(video, element){
 }
 
 window.addEventListener('DOMContentLoaded', () => {
-  let lastVideo = localStorage.getItem('lastVideo')
-  let activeClass = localStorage.getItem('activeClass')
+  
+  document.querySelectorAll('.class-item').forEach(item => {
+      let itemId = item.getAttribute('dataLessonId')
+      let lastVideo = localStorage.getItem(`lastVideo-${itemId}`)
+      // let activeClass = localStorage.getItem(`lesson-${itemId}`)
 
-  if (lastVideo) {
-      document.getElementById('urlVideo').src = lastVideo
-      document.querySelector('.video-lesson').load()
-  }
-
-  // Verifica se activeClass não é nulo antes de tentar selecionar
-  if (activeClass) {
-      document.querySelectorAll('.class-item').forEach(item => {
-          if (item.innerText.trim() === activeClass) {
-              item.classList.add('active-class')
-          }
-      })
-  }
+      if(lastVideo){
+        let sourceElement = document.getElementById('urlVideo')
+        let videoElement = document.getElementById('videoLesson')
+        
+        sourceElement.src = lastVideo
+        videoElement.load()      
+      }
+      
+      let lastClass = localStorage.getItem('lastClass')
+      if(itemId === lastClass){
+        item.classList.add('active-class')
+      } 
+   })
 })
