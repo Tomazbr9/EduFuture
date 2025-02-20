@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from utils.other_functions import slice_courses
-from courses.models import Course, Student, StudentCourse, Class, Module
+from courses.models import Course, Student, StudentCourse, StudentClass, Class
 from collections import defaultdict
 
 def home(request):
@@ -37,11 +37,12 @@ def course(request, course_id):
     course_purchased = False
     try:
         user = Student.objects.get(user=request.user)
-        # Verificar se o usuario comprou o curso
-        course_purchased = StudentCourse.objects.filter(
-        course=course, student=user).exists()
     except Exception:
         ...
+
+    # Verificar se o usuario comprou o curso
+    course_purchased = StudentCourse.objects.filter(
+    course=course, student=user).exists()
     
     # Lista de Objetivos de aprendizado
     learning_list = course.objective.split('\n')
@@ -49,6 +50,11 @@ def course(request, course_id):
     # Quantidade de alunos matriculados
     number_of_students = StudentCourse.objects.filter(course=course).count()
 
+    # obter todos as aulas relacionadas ao aluno
+    student_classes = StudentClass.objects.filter(student=user)
+    classes = [sc.cls for sc in student_classes]
+
+    print(classes)
     
     # Obtem os modulos e aulas do curso
     modules = course.modules.prefetch_related('classes') # type: ignore

@@ -4,6 +4,20 @@
         <video class="video-lesson" id="videoLesson" controls>
             <source id="urlVideo" src="">
         </video>
+        <h1 class="title-lesson">{{course.name}}</h1>
+        <div class="container-certificate-conclusion">
+            <p>Certificado</p>
+            <div>
+              <p>Pegue seu certificado de conclusão</p>
+              <button>Certificado EduFuture</button>
+            </div>
+        </div>
+        <div class="container-certificate-conclusion">
+            <p>Descrição</p>
+            <div>
+              <p>{{course.description}}</p>
+            </div>
+        </div>
     </div>
     <div class="content-course-purchased">
         <div class="content-course">
@@ -16,11 +30,13 @@
                             <p>{{module_title}}</p>
                         </div>
                     </div>
-
                     <div id="classes-{{module_title}}" class="content-class">
                         {% if classes %}
                             {% for classe in classes %}
-                                <p style="cursor: pointer; margin: 0;" onclick="displayClassVideo('{% get_media_prefix %}{{ classe.video }}', this)" class="class-item" dataLessonId="lesson-{{classe.id}}">{{ classe.title }}</p>
+                                <div style="cursor: pointer; margin: 0;" onclick="displayClassVideo('{% get_media_prefix %}{{ classe.video }}', this)" class="class-item" courseId="course-{{course.pk}}" classId="lesson-{{classe.id}}">
+                                    <input type="checkbox" onclick="finishClass(this, {{classe.id}})">
+                                    {{ classe.title }}
+                                </div>    
                             {% empty %}
                                 <p><b>Não existe aulas nesse módulo</b></p>
                             {% endfor %}

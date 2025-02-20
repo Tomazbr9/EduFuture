@@ -92,7 +92,7 @@ class StudentModule(Base):
 
 # Modelo para relacionar Aula com Aluno
 class StudentClass(Base):
-    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    student = models.ForeignKey(Student, related_name='student_class', on_delete=models.CASCADE)
     cls = models.ForeignKey(Class, on_delete=models.CASCADE)
     completed = models.BooleanField(default=False)
 

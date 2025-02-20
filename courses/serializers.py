@@ -123,8 +123,6 @@ class ClassSerializer(serializers.ModelSerializer):
         # Retorna a nova aula criada.
         return new_class
 
-
-
 class StudentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Student

@@ -52,7 +52,7 @@ async function fetchWithTokenRefresh(url, options = {}) {
           ...options.headers,
           'Authorization': `Bearer ${newAccessToken}`
         }
-      });
+      })
     } catch (error) {
       console.error("Erro ao renovar o token:", error)
       throw error
@@ -250,15 +250,24 @@ function buyCourses() {
 function displayClassVideo(video, element){
   let sourceElement = document.getElementById('urlVideo')
   let videoElement = document.getElementById('videoLesson')
-  let itemId = element.getAttribute('dataLessonId')
+  let classId = element.getAttribute('classId')
+  let courseId = element.getAttribute('courseId')
+
+  try {
+    let classeActivated = JSON.parse(localStorage.getItem(courseId) ?? '{}') || {} 
+    classeActivated[courseId] = {[classId]: video} 
+    localStorage.setItem(courseId, JSON.stringify(classeActivated))
+  } 
+  catch (error) {
+    console.error("Erro ao acessar localStorage:", error)
+    localStorage.setItem(courseId, JSON.stringify({})) 
+  }
 
   sourceElement.src = video
   videoElement.load()
   videoElement.play()
 
-  localStorage.setItem(`lastVideo-${itemId}`, video)
-  localStorage.setItem(`lesson-${itemId}`, element.innerText.trim())
-  localStorage.setItem('lastClass', itemId)
+  localStorage.setItem(`lastVideo-${classId}`, video)
 
   document.querySelectorAll('.class-item').forEach(item => {
     item.classList.remove('active-class')
@@ -269,23 +278,34 @@ function displayClassVideo(video, element){
 }
 
 window.addEventListener('DOMContentLoaded', () => {
+  let sourceElement = document.getElementById('urlVideo')
+  let videoElement = document.getElementById('videoLesson')
   
   document.querySelectorAll('.class-item').forEach(item => {
-      let itemId = item.getAttribute('dataLessonId')
-      let lastVideo = localStorage.getItem(`lastVideo-${itemId}`)
-      // let activeClass = localStorage.getItem(`lesson-${itemId}`)
-
-      if(lastVideo){
-        let sourceElement = document.getElementById('urlVideo')
-        let videoElement = document.getElementById('videoLesson')
-        
-        sourceElement.src = lastVideo
-        videoElement.load()      
-      }
+      let courseId = item.getAttribute('courseId')
+      let classId = item.getAttribute('classId')
       
-      let lastClass = localStorage.getItem('lastClass')
-      if(itemId === lastClass){
-        item.classList.add('active-class')
-      } 
+      let classeActivated = JSON.parse(localStorage.getItem(courseId))
+      
+      for(let [course, lesson] of Object.entries(classeActivated)){
+        for(let info in lesson){
+          if(info === classId){
+            item.classList.add('active-class')
+
+            sourceElement.src = lesson[info]
+            videoElement.load()
+          }
+        }
+      }
    })
 })
+
+function finishClass(element, classId){
+  // fetch(`/courses/students_classes/${classId}`, {
+  //   method: 'POST',
+  //   headers: {
+  //     'Content-Type': 'application/json',
+  //   },
+  //   body: JSON.stringify({ completed: true})
+  // })
+}
