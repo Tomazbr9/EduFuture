@@ -34,7 +34,7 @@
                         {% if classes %}
                             {% for classe in classes %}
                                 <div style="cursor: pointer; margin: 0;" onclick="displayClassVideo('{% get_media_prefix %}{{ classe.video }}', this)" class="class-item" courseId="course-{{course.pk}}" classId="lesson-{{classe.id}}">
-                                    <input type="checkbox" onclick="finishClass(this, {{classe.id}})">
+                                    <input type="checkbox" onclick="finishClass(this, {{classe.id}})" {% if classe.completed %}checked{% endif %}>
                                     {{ classe.title }}
                                 </div>    
                             {% empty %}

@@ -50,19 +50,21 @@ def course(request, course_id):
     # Quantidade de alunos matriculados
     number_of_students = StudentCourse.objects.filter(course=course).count()
 
-    # obter todos as aulas relacionadas ao aluno
-    student_classes = StudentClass.objects.filter(student=user)
-    classes = [sc.cls for sc in student_classes]
-
-    print(classes)
     
     # Obtem os modulos e aulas do curso
     modules = course.modules.prefetch_related('classes') # type: ignore
     modules_dict = {}
-
+    lessons_dict = {}
+    student_classes = StudentClass.objects.filter(student=user, cls__module__course=course)
+    for i in student_classes:
+        lessons_dict[i.cls.pk] =  i.completed
     for module in modules:
-        modules_dict[module.title] = list(module.classes.values('id', 'title', 'video'))
-
+        for i in module.classes.all():
+            for id, completed in lessons_dict.items():
+                if id == i.pk:
+                    modules_dict[module.title] = [{**cls, 'completed': completed} for cls in module.classes.values('id', 'title', 'video')]
+    
+    print(modules_dict)
     context = {
         'course_purchased': course_purchased,
         'course': course,

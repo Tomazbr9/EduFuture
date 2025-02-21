@@ -301,11 +301,12 @@ window.addEventListener('DOMContentLoaded', () => {
 })
 
 function finishClass(element, classId){
-  // fetch(`/courses/students_classes/${classId}`, {
-  //   method: 'POST',
-  //   headers: {
-  //     'Content-Type': 'application/json',
-  //   },
-  //   body: JSON.stringify({ completed: true})
-  // })
+  console.log(element.checked)
+  fetch(`/courses/students_classes/${classId}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ completed: element.checked})
+  })
 }
