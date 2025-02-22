@@ -38,7 +38,7 @@ def remove_item_cart(request, item_id):
     if str(item_id) in cart:
         del cart[str(item_id)]
         request.session['cart'] = cart  # Atualiza a sessão
-
+    
     return redirect('cart')
 
 @login_required(login_url='login-user')

@@ -55,16 +55,27 @@ def course(request, course_id):
     modules = course.modules.prefetch_related('classes') # type: ignore
     modules_dict = {}
     lessons_dict = {}
-    student_classes = StudentClass.objects.filter(student=user, cls__module__course=course)
+
+    student_classes = StudentClass.objects.filter(
+        student=user, cls__module__course=course
+    )
+
     for i in student_classes:
-        lessons_dict[i.cls.pk] =  i.completed
+        lessons_dict[i.cls.pk] =  {'id': i.pk, 'completed': i.completed}
     for module in modules:
         for i in module.classes.all():
-            for id, completed in lessons_dict.items():
+            for id, student_class in lessons_dict.items():
                 if id == i.pk:
-                    modules_dict[module.title] = [{**cls, 'completed': completed} for cls in module.classes.values('id', 'title', 'video')]
-    
+                    modules_dict[module.title] = [
+                        {
+                            **cls, 'id_student_class': student_class['id'], 
+                            'completed': student_class['completed']
+                        } 
+                        for cls in module.classes.values('id', 'title', 'video')
+                    ]
+
     print(modules_dict)
+
     context = {
         'course_purchased': course_purchased,
         'course': course,

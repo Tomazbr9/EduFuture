@@ -26,7 +26,7 @@ function refreshToken() {
     localStorage.removeItem('refresh_token')
     window.location.href = '/courses/login_user'
     throw error
-  });
+  })
 }
 
 async function fetchWithTokenRefresh(url, options = {}) {
@@ -124,7 +124,7 @@ function loginUser(event) {
   })
   .then(response => {
     if(response.ok){
-      // window.location.href = '/courses/home/'
+      window.location.href = '/courses/home/'
     }
 
     return response.json()
@@ -301,12 +301,11 @@ window.addEventListener('DOMContentLoaded', () => {
 })
 
 function finishClass(element, classId){
-  console.log(element.checked)
-  fetch(`/courses/students_classes/${classId}`, {
-    method: 'POST',
+  fetchWithTokenRefresh(`/courses/students_classes/${classId}/`, {
+    method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ completed: element.checked})
+    body: JSON.stringify({ "completed": element.checked }) 
   })
 }
