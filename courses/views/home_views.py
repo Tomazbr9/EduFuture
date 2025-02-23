@@ -54,25 +54,30 @@ def course(request, course_id):
     # Obtem os modulos e aulas do curso
     modules = course.modules.prefetch_related('classes') # type: ignore
     modules_dict = {}
-    lessons_dict = {}
 
     student_classes = StudentClass.objects.filter(
         student=user, cls__module__course=course
-    )
+    ).select_related('cls')
 
-    for i in student_classes:
-        lessons_dict[i.cls.pk] =  {'id': i.pk, 'completed': i.completed}
+    lessons_dict = {
+        sc.cls.pk: {'id': sc.pk, 'completed': sc.completed}
+        for sc in student_classes
+    }
+    
     for module in modules:
-        for i in module.classes.all():
-            for id, student_class in lessons_dict.items():
-                if id == i.pk:
-                    modules_dict[module.title] = [
-                        {
-                            **cls, 'id_student_class': student_class['id'], 
-                            'completed': student_class['completed']
-                        } 
-                        for cls in module.classes.values('id', 'title', 'video')
-                    ]
+        module_classes = []
+        for cls in module.classes.values('id', 'title', 'video'):
+            classes_info = lessons_dict.get(
+                cls['id'], {'id': None, 'completed': None}
+            )
+        
+            module_classes.append({
+                **cls,
+                'id_student_classes': classes_info['id'],
+                'completed': classes_info['completed']
+            })
+
+        modules_dict[module.title] = module_classes
 
     print(modules_dict)
 

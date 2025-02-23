@@ -391,6 +391,10 @@ body {
 }
 
 .class-item {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  gap: 10px;
   font-weight: 500;
   width: 100%;
   padding: 10px;
@@ -398,6 +402,10 @@ body {
   font-size: 20px;
   background-color: rgb(0, 0, 0, 0.2);
   color: var(--terciary-color);
+}
+
+.class-item p {
+  margin: 0;
 }
 
 .active-class {
