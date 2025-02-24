@@ -741,3 +741,46 @@ body {
   display: none;
 }
 
+/* area curso criaçao */
+
+.container-creation {
+  display: flex;
+  justify-content: center;
+}
+
+.card-course {
+  background-color: #ffffff;
+  border-radius: 20px;
+  padding: 20px;
+  margin: 20px;
+  width: 400px;
+  height: 450px;
+  box-shadow: 1px 1px 3px rgb(0, 0, 0, 0.5);
+}
+
+.form-creation {
+  height: 100%;
+  position: relative;
+}
+
+.overflow-form {
+  overflow: auto;
+  height: 320px;
+}
+
+.btn-create {
+  font-size: 20px;
+  position: absolute;
+  bottom: 0;
+  border-radius: 10px;
+  border: 0.5px solid rgb(0, 0, 0, 0.2);
+  padding: 6px;
+  background-color: var(--primary-color);
+  color: #ffffff;
+}
+
+.field-label-create {
+  font-size: 15px;
+}
+
+

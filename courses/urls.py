@@ -20,6 +20,7 @@ urlpatterns = [
     path('home/', views.home, name='home'),
     path('course/<int:course_id>/', views.course, name='course'),
     path('my_courses/', views.courses_from_user, name='my-courses'),
+    path('course_create/', views.course_create, name='course-create'),
 
     # urls cart
     path('cart/', views.cart_view, name='cart'),

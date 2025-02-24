@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block main_content %}
+    <div>
+        <h2>Criar Curso<h2>
+        <div class="container-creation">
+            <div class="card-course">
+                <form class="form-creation">
+                    <div class="overflow-form">
+                        <div class="form-group">
+                            <label class="field-label-create" for="nameCourseCreate">Nome do Curso</label>
+                            <input class="form-control" type="text" id="nameCourseCreate">
+                        </div>
+                        <div class="form-group">
+                            <label class="field-label-create" for="descriptionCourseCreate">Descrição do Curso</label>
+                            <textarea class="form-control" id="descriptionCourseCreate" rows="3"></textarea>
+                        </div> 
+                        <div class="form-group">
+                            <label class="field-label-create" for="priceCourseCreate">Preço do Curso</label>
+                            <input class="form-control" type="number" id="priceCourseCreate">
+                        </div>
+                        <div class="form-group">
+                            <label class="field-label-create" for="imageCourseCreate">Imagem do Curso</label>
+                            <input class="form-control" type="file" id="imageCourseCreate">
+                        </div>
+                        <div class="form-group">
+                            <label class="field-label-create" for="courseCategory">Categoria do Curso</label>
+                            <select class="form-control" id="courseCategory">
+                                <option>Tecnologia</option>
+                                <option>Saúde e Fitness</option>
+                                <option>Economia e finançãs</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn-create">Criar Curso</button>
+                    </div>
+                </form>
+            </div>
+            <div class="card-course">
+                <form class="form-creation">
+                    <div class="form-group">
+                        <label class="field-label-create" for="nameModuleCreate">Nome do modulo</label>
+                        <input class="form-control" type="text" id="nameModuleCreate">
+                    </div>
+                    <button type="submit" class="btn-create">Criar Modulo</button>
+                </form>
+            </div>
+            <div class="card-course">
+                <form class="form-creation">
+                    <div class="form-group">
+                        <label class="field-label-create" for="nameLessonCreate">Nome da aula</label>
+                        <input class="form-control" type="text" id="nameLessonCreate">
+                    </div>
+                    <div class="form-group">
+                        <label class="field-label-create" for="materialsLessonCreate">Materiais</label>
+                        <input class="form-control" type="text" id="materialsLessonCreate">
+                    </div>
+                    <div class="form-group">
+                        <label class="field-label-create" for="videoLessonCreate">Video Aula</label>
+                        <input class="form-control" type="" id="videoLessonCreate">
+                    </div>
+                    <button type="submit" class="btn-create">Criar Aula</button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock main_content %}

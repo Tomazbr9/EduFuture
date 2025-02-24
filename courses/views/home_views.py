@@ -102,3 +102,7 @@ def courses_from_user(request):
     }
 
     return render(request, 'courses_from_user.html', context)
+
+def course_create(request):
+
+    return render(request, 'course_creation_area')
