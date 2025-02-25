@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from utils.other_functions import slice_courses
-from courses.models import Course, Student, StudentCourse, StudentClass, Class
-from collections import defaultdict
+from courses.models import Course, Student, StudentCourse, StudentClass, Category
+from utils.instructor import InstructorUtil
 
 def home(request):
 
@@ -104,5 +104,17 @@ def courses_from_user(request):
     return render(request, 'courses_from_user.html', context)
 
 def course_create(request):
+    
+    # obtendo todos os cursos criados pelo instructor
+    instructor_courses = InstructorUtil(request).take_courses()
 
-    return render(request, 'course_creation_area')
+    # obtem todas categorias disponiveis
+    categorys = Category.objects.all()
+
+
+    context = {
+        'courses': instructor_courses,
+        'categorys': categorys
+    }
+
+    return render(request, 'course_creation_area', context)

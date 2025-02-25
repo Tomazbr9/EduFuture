@@ -16,6 +16,7 @@ class CourseSerializer(serializers.ModelSerializer):
             'description',   # Descrição do curso.
             'price',         # Preço do curso.
             'image',         # Imagem representativa do curso.
+            'category',      # Categoria do curso
             'instructor'     # Instrutor responsável pelo curso.
         ]
 

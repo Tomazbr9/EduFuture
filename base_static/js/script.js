@@ -309,3 +309,35 @@ function finishClass(element, classId){
     body: JSON.stringify({ "completed": element.checked }) 
   })
 }
+
+function saveCategoryId(element){
+    categoryId = document.getElementById('categoryId')
+    value = element.value
+    categoryId.value = value
+}
+
+function createCourseInstructor(event){
+    event.preventDefault()
+
+    console.log('olaaaa')
+
+    let name = document.getElementById('nameCourseCreate').value
+    let description = document.getElementById('descriptionCourseCreate').value
+    let price = document.getElementById('priceCourseCreate').files[0]
+    let image = document.getElementById('imageCourseCreate')
+
+    fetchWithTokenRefresh('/courses/courses', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(
+        {
+           "name": name, 
+           "description": description,
+           "price": price,
+           "image": image
+        }
+      ) 
+    })
+}
