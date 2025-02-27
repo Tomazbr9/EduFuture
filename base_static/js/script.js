@@ -316,28 +316,42 @@ function saveCategoryId(element){
     categoryId.value = value
 }
 
-function createCourseInstructor(event){
+formCreateCourse = document.getElementById('formCreateCourse')
+if(formCreateCourse){
+  formCreateCourse.addEventListener('submit', (event) => {
     event.preventDefault()
 
-    console.log('olaaaa')
+      let name = document.getElementById('nameCourseCreate').value
+      let description = document.getElementById('descriptionCourseCreate').value
+      let price = document.getElementById('priceCourseCreate').value
+      // let image = document.getElementById('imageCourseCreate')
+      let category = document.getElementById('categoryId').value
 
-    let name = document.getElementById('nameCourseCreate').value
-    let description = document.getElementById('descriptionCourseCreate').value
-    let price = document.getElementById('priceCourseCreate').files[0]
-    let image = document.getElementById('imageCourseCreate')
+      console.log(name)
+      console.log(description)
+      console.log(price)
+      console.log(category)
 
-    fetchWithTokenRefresh('/courses/courses', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(
-        {
-           "name": name, 
-           "description": description,
-           "price": price,
-           "image": image
+      fetchWithTokenRefresh('/courses/courses/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(
+          {
+            "name": name, 
+            "description": description,
+            "price": price,
+            // "image": image,
+            "category": category
+          }
+        ) 
+      }).then(response => {
+        if(response.ok){
+          console.log("tudo ok!")
         }
-      ) 
-    })
+      })
+  })
 }
+  
+

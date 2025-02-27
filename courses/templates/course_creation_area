@@ -4,7 +4,7 @@
         <h2>Criar Curso<h2>
         <div class="container-creation">
             <div class="card-course">
-                <form class="form-creation" method="post">
+                <form class="form-creation" id="formCreateCourse">
                     <div class="overflow-form">
                         <div class="form-group">
                             <label class="field-label-create" for="nameCourseCreate">Nome do Curso</label>
@@ -20,7 +20,7 @@
                         </div>
                         <div class="form-group">
                             <label class="field-label-create" for="imageCourseCreate">Imagem do Curso</label>
-                            <input class="form-control" type="file" id="imageCourseCreate" name="image" required>
+                            <input class="form-control" type="file" id="imageCourseCreate" name="image">
                         </div>
                         <div class="form-group">
                             <label class="field-label-create" for="courseCategory">Categoria do Curso</label>
@@ -31,7 +31,7 @@
                             </select>
                             <input type="hidden" id="categoryId" value="1" name="category">
                         </div>
-                        <button id="createCourse" onclick="createCourseInstructor()" type="submit" class="btn-create">Criar Curso</button>
+                        <button id="createCourse"  type="submit" class="btn-create">Criar Curso</button>
                     </div>
                 </form>
             </div>
