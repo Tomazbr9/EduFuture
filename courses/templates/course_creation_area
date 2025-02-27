@@ -24,7 +24,7 @@
                         </div>
                         <div class="form-group">
                             <label class="field-label-create" for="courseCategory">Categoria do Curso</label>
-                            <select class="form-control" onchange="saveCategoryId(this)" id="courseCategory">
+                            <select class="form-control" onchange="saveId(this, categoryId)" id="courseCategory">
                                 {% for category in categorys %}
                                     <option value={{category.pk}}>{{category.name}}</option>
                                 {% endfor %}
@@ -36,33 +36,44 @@
                 </form>
             </div>
             <div class="card-course">
-                <form class="form-creation">
+                <form class="form-creation" id="formCreateModule">
                     <div class="form-group">
                         <label class="field-label-create" for="nameModuleCreate">Nome do modulo</label>
                         <input class="form-control" type="text" id="nameModuleCreate">
                     </div>
                     <div class="form-group">
-                        <label class="field-label-create" for="courseModuleCreate">Curso</label>
-                        <input class="form-control" type="text" id="courseModuleCreate">
-                        <input type="hidden" id="hiddenCourseModuleCreate" value="">
+                        <label class="field-label-create" for="coursesModuleCreate">Curso</label>
+                        <select class="form-control" onchange="saveId(this, courseIdModuleCreate)" id="coursesModuleCreate">
+                            {% for course in courses %}
+                                <option value={{course.pk}}>{{course.name}}</option>
+                            {% endfor %}
+                        </select>
+                        <input type="hidden" id="courseIdModuleCreate", value="", name="course">
                     </div>
                     <button type="submit" class="btn-create">Criar Modulo</button>
                 </form>
             </div>
             <div class="card-course">
-                <form class="form-creation">
+                <form class="form-creation" id="formLessonCreate">
                     <div class="form-group">
                         <label class="field-label-create" for="nameLessonCreate">Nome da aula</label>
                         <input class="form-control" type="text" id="nameLessonCreate">
                     </div>
                     <div class="form-group">
                         <label class="field-label-create" for="materialsLessonCreate">Materiais</label>
-                        <input class="form-control" type="text" id="materialsLessonCreate">
+                        <input class="form-control" type="file" id="materialsLessonCreate">
                     </div>
                     <div class="form-group">
                         <label class="field-label-create" for="videoLessonCreate">Video Aula</label>
-                        <input class="form-control" type="" id="videoLessonCreate">
+                        <input class="form-control" type="file" id="videoLessonCreate">
                     </div>
+                    <label class="field-label-create" for="lessonModuleCreate">Curso</label>
+                    <select class="form-control" onchange="saveId(this, lessonIdModuleCreate)" id="lessonModuleCreate">
+                        {% for module in modules %}
+                            <option value={{module.pk}}>{{module.title}} | {{module.course.name}}</option>
+                        {% endfor %}
+                    </select>
+                    <input type="hidden" id="lessonIdModuleCreate", value="", name="module">
                     <button type="submit" class="btn-create">Criar Aula</button>
                 </form>
             </div>

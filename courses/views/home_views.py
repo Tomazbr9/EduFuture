@@ -108,12 +108,16 @@ def course_create(request):
     # obtendo todos os cursos criados pelo instructor
     instructor_courses = InstructorUtil(request).take_courses()
 
+    # obtendo todos os modulos criado pelo instrutor
+    instructor_modules = InstructorUtil(request).take_modules()
+
     # obtem todas categorias disponiveis
     categorys = Category.objects.all()
 
 
     context = {
         'courses': instructor_courses,
+        'modules': instructor_modules,
         'categorys': categorys
     }
 

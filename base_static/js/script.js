@@ -1,6 +1,5 @@
 function refreshToken() {
   const refreshToken = localStorage.getItem('refresh_token')
-  console.log(refreshToken)
   return fetch('/courses/refresh_token/', {
     method: 'POST',
     headers: {
@@ -310,13 +309,11 @@ function finishClass(element, classId){
   })
 }
 
-function saveCategoryId(element){
-    categoryId = document.getElementById('categoryId')
-    value = element.value
-    categoryId.value = value
+function saveId(element, id){
+    id.value = element.value
 }
 
-formCreateCourse = document.getElementById('formCreateCourse')
+const formCreateCourse = document.getElementById('formCreateCourse')
 if(formCreateCourse){
   formCreateCourse.addEventListener('submit', (event) => {
     event.preventDefault()
@@ -324,34 +321,71 @@ if(formCreateCourse){
       let name = document.getElementById('nameCourseCreate').value
       let description = document.getElementById('descriptionCourseCreate').value
       let price = document.getElementById('priceCourseCreate').value
-      // let image = document.getElementById('imageCourseCreate')
+      let image = document.getElementById('imageCourseCreate').files[0]
       let category = document.getElementById('categoryId').value
 
-      console.log(name)
-      console.log(description)
-      console.log(price)
-      console.log(category)
+      const formData = new FormData()
+      formData.append('name', name)
+      formData.append('description', description)
+      formData.append('price', price)
+      formData.append('image', image)
+      formData.append('category', category)
 
       fetchWithTokenRefresh('/courses/courses/', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(
-          {
-            "name": name, 
-            "description": description,
-            "price": price,
-            // "image": image,
-            "category": category
-          }
-        ) 
-      }).then(response => {
-        if(response.ok){
-          console.log("tudo ok!")
-        }
-      })
+        body: formData 
+      }).catch(error => console.error("Error:", error))
   })
 }
   
 
+const formCreateModule = document.getElementById('formCreateModule')
+if(formCreateModule){
+  formCreateModule.addEventListener('submit', (event)=>{
+    event.preventDefault()
+
+    let nameModule = document.getElementById('nameModuleCreate').value
+    let idCourse = document.getElementById('courseIdModuleCreate').value
+
+    const formData = new FormData()
+    formData.append('title', nameModule)
+    formData.append('course', idCourse)
+
+    fetchWithTokenRefresh('/courses/modules/', {
+        method: 'POST',
+        body: formData
+    }).then(response => {
+      if(response.ok){
+        location.reload()
+      }
+    })
+    .catch(error => console.error("Error:", error))
+  })
+}
+
+const formLessonCreate = document.getElementById('formLessonCreate')
+if(formLessonCreate){
+    formLessonCreate.addEventListener('submit', (event)=>{
+      event.preventDefault()
+
+      let nameLesson = document.getElementById('nameLessonCreate').value
+      let materials = document.getElementById('materialsLessonCreate').files[0]
+      let video = document.getElementById('videoLessonCreate').files[0]
+      let module = document.getElementById('lessonIdModuleCreate').value
+
+      const formData = new FormData()
+      formData.append('title', nameLesson)
+      formData.append('materials', materials)
+      formData.append('video', video)
+      formData.append('module', module)
+
+      fetchWithTokenRefresh('/courses/classes/', {
+        method: 'POST',
+        body: formData
+      }).then(response => {
+        if(response.ok){
+          location.reload()
+        }
+      }).catch(error => console.error('Error:', error))
+      })
+}
