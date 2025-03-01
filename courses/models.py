@@ -82,7 +82,7 @@ class Class(models.Model):
 class StudentCourse(Base):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    certificate = models.URLField(default="")
+    certificate = models.FileField(upload_to='certificates/')
     completed = models.BooleanField(default=False)
 
 # Modelo para relacionar Modulo com Aluno

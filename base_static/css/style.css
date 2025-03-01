@@ -2,6 +2,7 @@
     --primary-color: #ff66c4;
     --second-color: #97cfca;
     --terciary-color: #1F271B;
+    --error: #ff6347;
 }
 
 body {
@@ -783,5 +784,12 @@ body {
   font-size: 15px;
 }
 
+.container-message-error {
+  display: flex;
+  justify-content: center;
+}
 
-
+.container-message-error p{
+  margin: 0;
+  color: var(--error);
+}

@@ -1,32 +1,35 @@
 from PIL import Image, ImageDraw, ImageFont
 from pathlib import Path
 from datetime import datetime
+import os
+
+MEDIA_PATH = Path(__file__).parent.parent / 'media'
+print(os.path.exists(MEDIA_PATH / 'logo'/ 'logo edufuture.png'))
 
 def generate_certificate(student_name, course_name):
     MEDIA_PATH = Path(__file__).parent.parent / 'media'
     MODEL_PATH = MEDIA_PATH / 'model_certificate' / 'modelo_certificado.jpg'
     SAVE_IN = MEDIA_PATH / 'certificates'
-    font = 'arial.ttf'
-    font_size = 50
+    FONT_PATH = MEDIA_PATH / 'fonts' / 'GreatVibes-Regular.ttf'
+    font_size_name = 100
+    font_size_course = 60
+    font_size_date = 50
 
     certificate = Image.open(MODEL_PATH)
     draw = ImageDraw.Draw(certificate)
 
-    font_name = ImageFont.truetype(font, font_size)
-    font_outhers = ImageFont.truetype(font, int(font_size * 1.5))
+    font_name = ImageFont.truetype(str(FONT_PATH), font_size_name)
+    font_course = ImageFont.truetype(str(FONT_PATH), font_size_course)
+    font_date = ImageFont.truetype(str(FONT_PATH), font_size_date)
 
-    name_pos = (670, 430)
-    draw.text(name_pos, student_name, font=font_name, fill='black')
+    name_pos = (certificate.width // 2, 450)
+    course_pos = (certificate.width // 2, 600)
+    date_pos = (certificate.width // 2, 750)
 
-    course_pos = (570, 580)
-    draw.text(course_pos, course_name, font=font_outhers, fill='black')
+    draw.text(name_pos, student_name, font=font_name, fill='black', anchor='mm')
+    draw.text(course_pos, course_name, font=font_course, fill='black', anchor='mm')
+    draw.text(date_pos, datetime.now().strftime("%d/%m/%Y"), font=font_date, fill='black', anchor='mm')
 
-    date_pos = (695, 685)
-    format = "%d/%m/%Y"
-    date = datetime.now().strftime(format)
-    draw.text(date_pos, f"{date}", font=font_name, fill='black')
-    
     certificate_path = SAVE_IN / f'certificado_{student_name}_{course_name}.jpg'
     certificate.save(certificate_path)
     return certificate_path
-    

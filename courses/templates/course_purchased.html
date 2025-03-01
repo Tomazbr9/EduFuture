@@ -1,4 +1,6 @@
+{% extends "base.html" %}
 {% load static %}
+{% block main_content %}
 <div class="container-course-purchased">
     <div>
         <video class="video-lesson" id="videoLesson" controls>
@@ -9,7 +11,7 @@
             <p>Certificado</p>
             <div>
               <p>Pegue seu certificado de conclusão</p>
-              <button>Certificado EduFuture</button>
+              <a href="{{certificate.url}}" target="_blank">Certificado EduFuture</a>
             </div>
         </div>
         <div class="container-certificate-conclusion">
@@ -51,6 +53,7 @@
         </div>
     </div>
 </div>
+{% endblock main_content %}
 
 
 

@@ -1,49 +1,52 @@
 {% extends "base.html" %}
 {% block main_content %}
 <div class="adjust-form-login">
-    <form class="container-form-register" method="post" action="{% url "register" %}">
+    <form class="container-form-register" id="formRegister">
         <h1 class="h3 mb-3 fw-normal">Registre-se</h1>
         <div class="grid-field-register">
             <div class="form-floating">
-                <input type="text" class="form-control" id="floatingUserName" placeholder="name@example.com" name="username">
+                <input type="text" class="form-control" id="floatingUserName" placeholder="usuário" name="username" required>
                 <label for="floatingUserName">Nome de usuario</label>
             </div>
             <div class="form-floating">
-                <input type="email" class="form-control" id="floatingEmail" placeholder="Password" name="email">
+                <input type="email" class="form-control" id="floatingEmail" name="email" placeholder="Email" required>
                 <label for="floatingEmail">Email</label>
             </div>
             <div class="form-floating">
-                <input type="text" class="form-control" id="floatingName" placeholder="Password" name="first_name">
+                <input type="text" class="form-control" id="floatingName" name="first_name" placeholder="Nome" required>
                 <label for="floatingName">Nome</label>
             </div>
             <div class="form-floating">
-                <input type="text" class="form-control" id="floatingLastName" placeholder="Password" name="last_name">
+                <input type="text" class="form-control" id="floatingLastName" name="last_name" placeholder="Sobrenome" required>
                 <label for="floatingLastName">Sobrenome</label>
             </div>
             <div class="form-floating">
-                <input type="text" class="form-control" id="floatingDate" placeholder="Password">
+                <input type="text" class="form-control" id="floatingDate" placeholder="Data de Nascimento" required>
                 <label for="floatingDate">Data de nascimento</label>
                 <input type="hidden" name="age" id="hiddenDate">
             </div>
             <div class="form-floating">
-                <input type="password" class="form-control" id="floatingPassword" placeholder="Password" name="password">
+                <input type="password" class="form-control" id="floatingPassword" placeholder="Senha" name="password" required>
                 <label for="floatingPassword">Senha</label>
             </div>
         </div>
             <div class="form-floating">
-                <input type="text" class="form-control" id="floatingCategory" name="categories">
+                <input type="text" class="form-control" id="floatingCategory" placeholder="Categoria" name="categories" required>
                 <label for="floatingCategory">Escolha uma Categoria de interesse</label>
                 <ul class="list-categories" id="listCategories">
                     {% for category in all_categories %}
                         <li onclick="assignCategory(this, '{{category.pk}}')" id="category-{{category.pk}}">{{category.name}}</li>
                     {% endfor %}
                 </ul>
-                <input type="hidden" name="category" id="hiddenCategory">
+                <input type="hidden" name="category" id="hiddenCategory" >
             </div>
             <div class="form-check">
-                <input type="checkbox" class="form-check-input" id="flexCheckDefault" placeholder="Password" name="is_instructor">
+                <input type="checkbox" class="form-check-input" id="flexCheckDefault" name="is_instructor">
                 <label for="flexCheckDefault" class="form-check-label">Deseja ser um instrutor?</label>
             </div>
+        <div class="container-message-error">
+            <p id="messageErrorRegister"></p>
+        </div>
         <button class="btn btn-login w-100 py-2" type="submit">Registrar</button>
     </form>
 </div>

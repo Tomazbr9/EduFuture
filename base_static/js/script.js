@@ -371,13 +371,13 @@ if(formLessonCreate){
       let nameLesson = document.getElementById('nameLessonCreate').value
       let materials = document.getElementById('materialsLessonCreate').files[0]
       let video = document.getElementById('videoLessonCreate').files[0]
-      let module = document.getElementById('lessonIdModuleCreate').value
+      let _module = document.getElementById('lessonIdModuleCreate').value
 
       const formData = new FormData()
       formData.append('title', nameLesson)
       formData.append('materials', materials)
       formData.append('video', video)
-      formData.append('module', module)
+      formData.append('module', _module)
 
       fetchWithTokenRefresh('/courses/classes/', {
         method: 'POST',
@@ -388,4 +388,47 @@ if(formLessonCreate){
         }
       }).catch(error => console.error('Error:', error))
       })
+}
+
+const formRegister = document.getElementById('formRegister')
+if(formRegister){
+  formRegister.addEventListener('submit', (event)=>{
+    event.preventDefault()
+
+    const messageErrorRegister = document.getElementById('messageErrorRegister')
+
+    let userName = document.getElementById('floatingUserName').value
+    let email = document.getElementById('floatingEmail').value
+    let firstName = document.getElementById('floatingName').value
+    let lastName = document.getElementById('floatingLastName').value
+    let date = document.getElementById('hiddenDate').value
+    let password = document.getElementById('floatingPassword').value
+    let category = document.getElementById('hiddenCategory').value
+    let isInstructor = document.getElementById('flexCheckDefault').checked
+
+    const formData = new FormData()
+    formData.append('username', userName)
+    formData.append('email', email)
+    formData.append('first_name', firstName)
+    formData.append('last_name', lastName)
+    formData.append('age', date)
+    formData.append('password', password)
+    formData.append('category', category)
+    formData.append('username', userName)
+    formData.append('is_instructor', isInstructor)
+
+    fetchWithTokenRefresh('/courses/register/', {
+      method: 'POST',
+      body: formData
+    }).then(response => {
+      if(response.ok){
+        window.location.href = '/courses/login_user/'
+      }
+
+      return response.json()
+    }).then(data => {
+      console.log(data.message)
+      messageErrorRegister.textContent = data.message || 'Erro no registro'
+    })
+  })
 }

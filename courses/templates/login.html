@@ -2,22 +2,22 @@
 {% block main_content %}
 <div class="adjust-form-login">
     <form method="post" action="{% url "login" %}" >
-        <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+        <h1 class="h3 mb-3 fw-normal">Por favor, faça login</h1>
         <div class="container-input-login">
             <div class="form-floating">
               <input type="text" class="form-control" id="floatingInputLogin" placeholder="username" name="username">
-              <label for="floatingInputLogin">Username</label>
+              <label for="floatingInputLogin">Usuário</label>
             </div>
             <div class="form-floating">
               <input type="password" class="form-control" id="floatingPasswordLogin" placeholder="password" name="password">
-              <label for="floatingPasswordLogin">Password</label>
+              <label for="floatingPasswordLogin">Senha</label>
             </div>
         </div>
 
         <div class="text-start my-3">
             <a href="{% url "register-user" %}" class="register-link">Não tem cadastro?</a>
         </div>
-        <div class="container-massage-error">
+        <div class="container-message-error">
           <p id="messageError"></p>
         </div>
         <button onclick="loginUser(event)" class="btn btn-login w-100 py-2" type="submit">Sign in</button>

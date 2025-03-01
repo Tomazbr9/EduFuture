@@ -34,62 +34,74 @@ def home(request):
 
 def course(request, course_id):
     course = get_object_or_404(Course, pk=course_id)
-    course_purchased = False
-    try:
+
+    try: 
         user = Student.objects.get(user=request.user)
+        course_purchased = StudentCourse.objects.filter(
+        course=course, student=user).exists()
     except Exception:
-        ...
+        course_purchased = False
 
-    # Verificar se o usuario comprou o curso
-    course_purchased = StudentCourse.objects.filter(
-    course=course, student=user).exists()
-    
-    # Lista de Objetivos de aprendizado
-    learning_list = course.objective.split('\n')
-
-    # Quantidade de alunos matriculados
-    number_of_students = StudentCourse.objects.filter(course=course).count()
-
-    
-    # Obtem os modulos e aulas do curso
-    modules = course.modules.prefetch_related('classes') # type: ignore
-    modules_dict = {}
-
-    student_classes = StudentClass.objects.filter(
-        student=user, cls__module__course=course
-    ).select_related('cls')
-
-    lessons_dict = {
-        sc.cls.pk: {'id': sc.pk, 'completed': sc.completed}
-        for sc in student_classes
-    }
-    
-    for module in modules:
-        module_classes = []
-        for cls in module.classes.values('id', 'title', 'video'):
-            classes_info = lessons_dict.get(
-                cls['id'], {'id': None, 'completed': None}
-            )
+    if course_purchased:
         
-            module_classes.append({
-                **cls,
-                'id_student_classes': classes_info['id'],
-                'completed': classes_info['completed']
-            })
+        # Obtem os modulos e aulas do curso
+        modules = course.modules.prefetch_related('classes') # type: ignore
+        modules_dict = {}
 
-        modules_dict[module.title] = module_classes
+        # obtem o certificado do aluno
+        certificate = StudentCourse.objects.get(
+            course=course, student=user
+        ).certificate
 
-    print(modules_dict)
+        student_classes = StudentClass.objects.filter(
+            student=user, cls__module__course=course
+        ).select_related('cls')
 
-    context = {
-        'course_purchased': course_purchased,
-        'course': course,
-        'learning_list': learning_list,
-        'number_of_students': number_of_students,
-        'modules_dict': modules_dict
-    }
+        lessons_dict = {
+            sc.cls.pk: {'id': sc.pk, 'completed': sc.completed}
+            for sc in student_classes
+        }
+        
+        for module in modules:
+            module_classes = []
+            for cls in module.classes.values('id', 'title', 'video'):
+                classes_info = lessons_dict.get(
+                    cls['id'], {'id': None, 'completed': None}
+                )
+            
+                module_classes.append({
+                    **cls,
+                    'id_student_classes': classes_info['id'],
+                    'completed': classes_info['completed']
+                })
+            
+            modules_dict[module.title] = module_classes
+        
+        context = {
+            'certificate': certificate,
+            'course': course,
+            'course_purchased': course_purchased,
+            'modules_dict': modules_dict,
+        }
+        
 
-    return render(request, 'course.html', context)
+        return render(request, 'course_purchased.html', context)
+    else:
+
+        # Lista de Objetivos de aprendizado
+        learning_list = course.objective.split('\n')
+
+        # Quantidade de alunos matriculados
+        number_of_students = StudentCourse.objects.filter(course=course).count()
+
+        context = {
+            'course_purchased': course_purchased,
+            'course': course,
+            'learning_list': learning_list,
+            'number_of_students': number_of_students,
+        }
+
+        return render(request, 'course.html', context)
 
 def courses_from_user(request):
     
