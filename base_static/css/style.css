@@ -13,8 +13,16 @@ body {
     margin: 0;
 }
 
+.btn-primary {
+  background-color: var(--primary-color) !important;
+}
+
 .main {
   flex: 1;
+}
+
+.card-img-top {
+  height: 200px;
 }
 
 .content-center {
@@ -792,4 +800,19 @@ body {
 .container-message-error p{
   margin: 0;
   color: var(--error);
+}
+
+.container-create-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.container-create-area h1 {
+  margin-top: 20px;
+}
+
+.display-my-courses {
+  padding: 0 !important;
 }

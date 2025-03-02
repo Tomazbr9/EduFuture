@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block main_content %}
-    <div>
-        <h2>Criar Curso<h2>
+    <div class="container-create-area">
+        <h1>Criar Curso<h1>
         <div class="container-creation">
             <div class="card-course">
                 <form class="form-creation" id="formCreateCourse">
@@ -78,7 +78,7 @@
                 </form>
             </div>
         </div>
-        <div class="container">
+        <div class="container display-my-courses">
             <div class="row">
                 {% for course in courses %}
                     <div class="col-md-4 mb-4">

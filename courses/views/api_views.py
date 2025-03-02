@@ -59,8 +59,6 @@ class ModuleViewSet(ModelViewSet):
         # Instancia e retorna as permissões configuradas.
         return [permission() for permission in permission_classes]
 
-
-
 class ClassViewSet(ModelViewSet):
     # Define o conjunto de consultas padrão para as aulas.
     queryset = Class.objects.all()

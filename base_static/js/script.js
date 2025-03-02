@@ -395,7 +395,7 @@ if(formRegister){
   formRegister.addEventListener('submit', (event)=>{
     event.preventDefault()
 
-    const messageErrorRegister = document.getElementById('messageErrorRegister')
+    let messageErrorRegister = document.getElementById('messageErrorRegister')
 
     let userName = document.getElementById('floatingUserName').value
     let email = document.getElementById('floatingEmail').value
@@ -417,18 +417,21 @@ if(formRegister){
     formData.append('username', userName)
     formData.append('is_instructor', isInstructor)
 
-    fetchWithTokenRefresh('/courses/register/', {
+    fetch('/courses/register/', {
       method: 'POST',
       body: formData
-    }).then(response => {
-      if(response.ok){
-        window.location.href = '/courses/login_user/'
-      }
-
-      return response.json()
-    }).then(data => {
-      console.log(data.message)
-      messageErrorRegister.textContent = data.message || 'Erro no registro'
     })
+    .then(response => response.json().then(data => ({ status: response.status, body: data })))
+    .then(result => {
+        if (result.status === 400) {
+            for(field in result.body){
+              messageErrorRegister.innerHTML += `${result.body[field]}<br>`
+            }
+        } 
+        else {
+            window.location.href = '/courses/login_user/'
+        }
+    })
+    .catch(error => console.error('Erro na requisição:', error));
   })
 }

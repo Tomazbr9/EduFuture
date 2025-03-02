@@ -155,6 +155,11 @@ class StudentCourseSerializer(serializers.ModelSerializer):
     def validate(self, data):
         student = self.get_authenticated_student()
         courses = data['courses']
+        
+        # Verifica se o instructor está comprando o proprio curso
+        for course in courses:
+            if course.instructor == student:
+                raise serializers.ValidationError('Professores não podem comprar o proprio curso!')
 
         # Verificar se o aluno já comprou algum dos cursos
         already_purchased = StudentCourse.objects.filter(student=student, course__in=courses).values_list('course_id', flat=True)
