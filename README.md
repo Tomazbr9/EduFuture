@@ -1,6 +1,6 @@
 # EduFuture  
 
-O **EduFuture** é um sistema de gestão acadêmica desenvolvido com **Django** e **Django Rest Framework**. O principal objetivo deste projeto foi colocar em prática tudo o que aprendi em cursos complementares, como a criação de **API Rest** utilizando **Django Rest Framework** e a implementação de autenticação JWT com **Django Simple JWT**.  
+O **EduFuture** é um sistema de cursos online desenvolvido com **Django** e **Django Rest Framework**. O principal objetivo deste projeto foi colocar em prática tudo o que aprendi em cursos complementares, como a criação de **API Rest** utilizando **Django Rest Framework** e a implementação de autenticação JWT com **Django Simple JWT**.  
 
 ## 🚀 Tecnologias utilizadas  
 
