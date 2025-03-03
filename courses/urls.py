@@ -10,13 +10,15 @@ router.register('students', views.StudentViewSet, basename='student')
 router.register('students_classes', views.StudentClassViewSet, basename='student-class')
 
 urlpatterns = [
+    # urls API
     path('', include(router.urls)),
     path('register/', views.RegisterUserApiView.as_view(), name='register'),
     path('update/<int:pk>/', views.UpdateUserApiView.as_view(), name='update-user'),
     path('login/', views.LoginApiView.as_view(), name='login'),
     path('buy/', views.BuyApiView.as_view(), name='buy'),
     path('refresh_token/', views.RefreshTokenView.as_view(), name='refresh_token'),
-
+    
+    # urls da home e cursos
     path('home/', views.home, name='home'),
     path('course/<int:course_id>/', views.course, name='course'),
     path('my_courses/', views.courses_from_user, name='my-courses'),

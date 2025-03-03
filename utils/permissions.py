@@ -39,32 +39,40 @@ class IsInstructor(permissions.BasePermission):
 
 
 class VerifyCoursePurchase(permissions.BasePermission):
+    """
+    Permissão personalizada para verificar se o usuário comprou o curso antes de acessar o conteúdo.
+    """
 
     def has_permission(self, request, view):
-        
+        """
+        Verifica se o usuário está autenticado antes de permitir qualquer acesso.
+        """
         if not request.user.is_authenticated:
-            raise PermissionDenied('É necessario está autenticado')
-        
+            raise PermissionDenied('É necessário estar autenticado')  # Bloqueia acesso de usuários não autenticados
         return True
-    
-    def has_object_permission(self, request, view, obj):
 
+    def has_object_permission(self, request, view, obj):
+        """
+        Verifica se o usuário tem permissão para acessar um objeto específico (curso).
+        """
+        # Obtém o curso associado ao objeto acessado
         course = obj.module.course
-        
+
         try:
+            # Busca o estudante vinculado ao usuário logado
             student = Student.objects.get(user=request.user)
         except Student.DoesNotExist:
-            return False
-        
-        if student.is_instructor:
-            if course.instructor == student:
-                return True
-        
-        if view.action in ['list', 'retrieve']:
+            return False  # Se o usuário não for um estudante, nega o acesso
+
+        # Permite acesso caso o usuário seja o instrutor do curso
+        if student.is_instructor and course.instructor == student:
+            return True
+
+        # Se a ação for listar ou visualizar ('list', 'retrieve'), verifica se o aluno comprou o curso
+        if getattr(view, "action", None) in ['list', 'retrieve']:
             if not StudentCourse.objects.filter(student=student, course=course).exists():
-                raise PermissionDenied('É necessario comprar o curso para assistir as aulas!')
-            else:
-                return True
-        
+                # Se o aluno não comprou o curso, bloqueia o acesso
+                raise PermissionDenied('É necessário comprar o curso para assistir às aulas!')
+            return True  # Permite o acesso se o aluno tiver comprado o curso
 
-
+        return False  # Caso nenhuma condição seja atendida, nega o acesso

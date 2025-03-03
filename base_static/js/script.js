@@ -1,3 +1,4 @@
+// Função para fazer a renovação de tokens 
 function refreshToken() {
   const refreshToken = localStorage.getItem('refresh_token')
   return fetch('/courses/refresh_token/', {
@@ -276,6 +277,7 @@ function displayClassVideo(video, element){
   
 }
 
+// Evento para exibição do ultima aula assistida
 window.addEventListener('DOMContentLoaded', () => {
   let sourceElement = document.getElementById('urlVideo')
   let videoElement = document.getElementById('videoLesson')
@@ -313,6 +315,7 @@ function saveId(element, id){
     id.value = element.value
 }
 
+// Função para fazer requisição para a criação de cursos
 const formCreateCourse = document.getElementById('formCreateCourse')
 if(formCreateCourse){
   formCreateCourse.addEventListener('submit', (event) => {
@@ -338,7 +341,7 @@ if(formCreateCourse){
   })
 }
   
-
+// Função para fazer requisição para a criação de modulos
 const formCreateModule = document.getElementById('formCreateModule')
 if(formCreateModule){
   formCreateModule.addEventListener('submit', (event)=>{
@@ -363,6 +366,7 @@ if(formCreateModule){
   })
 }
 
+// Função para fazer requisição para a criação de aulas
 const formLessonCreate = document.getElementById('formLessonCreate')
 if(formLessonCreate){
     formLessonCreate.addEventListener('submit', (event)=>{
@@ -390,6 +394,7 @@ if(formLessonCreate){
       })
 }
 
+// Função para fazer uma requisição de registro de novo úsuario
 const formRegister = document.getElementById('formRegister')
 if(formRegister){
   formRegister.addEventListener('submit', (event)=>{
@@ -432,6 +437,6 @@ if(formRegister){
             window.location.href = '/courses/login_user/'
         }
     })
-    .catch(error => console.error('Erro na requisição:', error));
+    .catch(error => console.error('Erro na requisição:', error))
   })
 }
